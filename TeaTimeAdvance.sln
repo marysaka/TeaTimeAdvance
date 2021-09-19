@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeaTimeAdvance", "TeaTimeAdvance\TeaTimeAdvance.csproj", "{8D976D58-A0AC-4474-B10B-EFD8910D5E56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaTimeAdvance.Tests", "TeaTimeAdvance.Tests\TeaTimeAdvance.Tests.csproj", "{663B796E-0231-48A4-A4CD-EF595607F75E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D976D58-A0AC-4474-B10B-EFD8910D5E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D976D58-A0AC-4474-B10B-EFD8910D5E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D976D58-A0AC-4474-B10B-EFD8910D5E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D976D58-A0AC-4474-B10B-EFD8910D5E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663B796E-0231-48A4-A4CD-EF595607F75E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663B796E-0231-48A4-A4CD-EF595607F75E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663B796E-0231-48A4-A4CD-EF595607F75E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663B796E-0231-48A4-A4CD-EF595607F75E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA3D063D-944E-467A-9C44-BFB3DBB62207}
+	EndGlobalSection
+EndGlobal
