@@ -1,13 +1,20 @@
-﻿using TeaTimeAdvance.Cpu.State;
+﻿using System;
+using TeaTimeAdvance.Bus;
+using TeaTimeAdvance.Cpu.State;
+using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Cpu
 {
     public class CpuContext
     {
         private CpuState _state;
+        private SchedulerContext _schedulerContext;
+        private BusContext _busContext;
 
-        public CpuContext()
+        public CpuContext(SchedulerContext schedulerContext, BusContext busContext)
         {
+            _schedulerContext = schedulerContext;
+            _busContext = busContext;
             _state = new CpuState();
             _state.Reset();
         }
@@ -32,6 +39,11 @@ namespace TeaTimeAdvance.Cpu
         public void SetCpuMode(CpuMode mode)
         {
             _state.SetCpuMode(mode);
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
         }
     }
 }

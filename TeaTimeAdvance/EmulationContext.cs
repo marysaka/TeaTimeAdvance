@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu;
 using TeaTimeAdvance.Cpu.State;
 using TeaTimeAdvance.Scheduler;
@@ -14,25 +15,24 @@ namespace TeaTimeAdvance
         private const int VerticalDimensionsCycles = 280896;
 
         private SchedulerContext _schedulerContext;
+        private BusContext _busContext;
         private CpuContext _cpuContext;
 
         public EmulationContext()
         {
             _schedulerContext = new SchedulerContext();
-            _cpuContext = new CpuContext();
+            _busContext = new BusContext(_schedulerContext);
+            _cpuContext = new CpuContext(_schedulerContext, _busContext);
         }
 
-        public void LoadBios(string biosPath)
+        public void Initialize(ReadOnlySpan<byte> bios, ReadOnlySpan<byte> rom)
         {
-            throw new NotImplementedException();
+            _busContext.Initialize(bios, rom);
+
+            Reset(true);
         }
 
-        public void LoadRom(string romPath)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Reset(bool skipBios)
+        private void Reset(bool skipBios)
         {
             _cpuContext.Reset();
 
@@ -57,9 +57,14 @@ namespace TeaTimeAdvance
             Execute(VerticalDimensionsCycles);
         }
 
-        public void Execute(int cycles)
+        public void Execute(ulong cycles)
         {
-            throw new NotImplementedException();
+            ulong targetCycle = _schedulerContext.CurrentCycle + cycles; 
+
+            while (_schedulerContext.CurrentCycle <= targetCycle)
+            {
+                _cpuContext.Update();
+            }
         }
     }
 }

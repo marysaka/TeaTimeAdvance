@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using System;
+using System.IO;
 
 namespace TeaTimeAdvance
 {
@@ -15,9 +16,11 @@ namespace TeaTimeAdvance
         private static void Start(Options options)
         {
             EmulationContext context = new EmulationContext();
-            context.LoadBios(options.BiosPath);
-            context.LoadRom(options.InputPath);
-            context.Reset(true);
+
+            ReadOnlySpan<byte> bios = File.ReadAllBytes(options.BiosPath);
+            ReadOnlySpan<byte> rom = File.ReadAllBytes(options.GamePath);
+
+            context.Initialize(bios, rom);
 
             while (context.IsRunning())
             {

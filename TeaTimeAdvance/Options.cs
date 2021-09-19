@@ -8,6 +8,6 @@ namespace TeaTimeAdvance
         public string BiosPath { get; set; }
 
         [Value(0, MetaName = "input", HelpText = "Input game to load.", Required = true)]
-        public string InputPath { get; set; }
+        public string GamePath { get; set; }
     }
 }

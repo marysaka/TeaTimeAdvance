@@ -6,24 +6,25 @@ namespace TeaTimeAdvance.Scheduler
 {
     public class SchedulerContext
     {
-        private ulong _currentCycle;
+        public ulong CurrentCycle { get; private set; }
+
         private List<ISchedulerWaiter> _waiters;
 
         public SchedulerContext()
         {
-            _currentCycle = 0;
+            CurrentCycle = 0;
             _waiters = new List<ISchedulerWaiter>();
         }
 
         public void Reset()
         {
-            _currentCycle = 0;
+            CurrentCycle = 0;
             _waiters.Clear();
         }
 
         public ISchedulerWaiter Register(ulong cycles, Action callback)
         {
-            ISchedulerWaiter waiter = new SchedulerWaiterHandle(_currentCycle + cycles, callback);
+            ISchedulerWaiter waiter = new SchedulerWaiterHandle(CurrentCycle + cycles, callback);
 
             int targetIndex;
 
@@ -56,7 +57,7 @@ namespace TeaTimeAdvance.Scheduler
 
         public void UpdateCycles(ulong cycles)
         {
-            ulong newCurrentCycle = _currentCycle + cycles;
+            ulong newCurrentCycle = CurrentCycle + cycles;
 
             ISchedulerWaiter expired = null;
             List<ISchedulerWaiter> expiredList = null;
@@ -98,7 +99,7 @@ namespace TeaTimeAdvance.Scheduler
                 }
             }
 
-            _currentCycle = newCurrentCycle;
+            CurrentCycle = newCurrentCycle;
         }
     }
 }
