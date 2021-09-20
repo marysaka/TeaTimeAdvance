@@ -1,4 +1,4 @@
-﻿namespace TeaTimeAdvance.Bus
+namespace TeaTimeAdvance.Bus
 {
     public interface IBusDevice
     {

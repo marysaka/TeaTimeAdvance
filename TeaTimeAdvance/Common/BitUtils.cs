@@ -1,4 +1,4 @@
-﻿namespace TeaTimeAdvance.Common
+namespace TeaTimeAdvance.Common
 {
     public class BitUtils
     {

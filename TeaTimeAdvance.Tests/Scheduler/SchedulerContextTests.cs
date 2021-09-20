@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Tests.Scheduler

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu.State;
 using TeaTimeAdvance.Scheduler;
@@ -7,43 +7,47 @@ namespace TeaTimeAdvance.Cpu
 {
     public class CpuContext
     {
-        private CpuState _state;
-        private SchedulerContext _schedulerContext;
-        private BusContext _busContext;
+        public CpuState State { get; }
+        public SchedulerContext Scheduler { get; }
+        public BusContext BusContext { get; }
 
-        public CpuContext(SchedulerContext schedulerContext, BusContext busContext)
+        private CpuPipeline _pipeline;
+
+        public CpuContext(SchedulerContext scheduler, BusContext busContext)
         {
-            _schedulerContext = schedulerContext;
-            _busContext = busContext;
-            _state = new CpuState();
-            _state.Reset();
+            Scheduler = scheduler;
+            BusContext = busContext;
+
+            State = new CpuState();
+            _pipeline = new CpuPipeline();
         }
 
         public void Reset()
         {
-            _state.Reset();
+            _pipeline.Reset();
+            State.Reset();
         }
 
         public void SetRegister(CpuRegister register, uint value)
         {
-            ref uint reg = ref _state.Register(register);
+            ref uint reg = ref State.Register(register);
 
             reg = value;
         }
 
         public uint GetRegister(CpuRegister register)
         {
-            return _state.Register(register);
+            return State.Register(register);
         }
 
         public void SetCpuMode(CpuMode mode)
         {
-            _state.SetCpuMode(mode);
+            State.SetCpuMode(mode);
         }
 
         public void Update()
         {
-            throw new NotImplementedException();
+            _pipeline.Update(this);
         }
     }
 }

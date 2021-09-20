@@ -1,4 +1,4 @@
-﻿namespace TeaTimeAdvance.Common.Memory
+namespace TeaTimeAdvance.Common.Memory
 {
     /// <summary>
     /// Array interface.

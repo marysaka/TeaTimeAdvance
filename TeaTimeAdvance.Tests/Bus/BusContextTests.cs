@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Device;
 using TeaTimeAdvance.Scheduler;

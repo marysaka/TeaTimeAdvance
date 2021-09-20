@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using TeaTimeAdvance.Common;
 using TeaTimeAdvance.Device;
@@ -106,11 +106,11 @@ namespace TeaTimeAdvance.Bus
             // TODO
         }
 
-        public byte Read8(uint address)
+        public byte Read8(uint address, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {
@@ -120,11 +120,11 @@ namespace TeaTimeAdvance.Bus
             return device.Read8(address);
         }
 
-        public ushort Read16(uint address)
+        public ushort Read16(uint address, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {
@@ -134,11 +134,11 @@ namespace TeaTimeAdvance.Bus
             return device.Read16(address);
         }
 
-        public uint Read32(uint address)
+        public uint Read32(uint address, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {
@@ -148,11 +148,11 @@ namespace TeaTimeAdvance.Bus
             return device.Read32(address);
         }
 
-        public void Write8(uint address, byte value)
+        public void Write8(uint address, byte value, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {
@@ -164,11 +164,11 @@ namespace TeaTimeAdvance.Bus
             device.Write8(address, value);
         }
 
-        public void Write16(uint address, ushort value)
+        public void Write16(uint address, ushort value, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {
@@ -180,11 +180,11 @@ namespace TeaTimeAdvance.Bus
             device.Write16(address, value);
         }
 
-        public void Write32(uint address, uint value)
+        public void Write32(uint address, uint value, BusAccessType accessType)
         {
             IBusDevice device = GetAssociatedDeviceAtAddress(address);
 
-            // TODO use clock cycles infos from the IBusDevice.
+            // TODO: clock cycles infos.
 
             if (device == null)
             {

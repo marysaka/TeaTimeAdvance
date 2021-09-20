@@ -1,4 +1,4 @@
-﻿namespace TeaTimeAdvance.Cpu.State
+namespace TeaTimeAdvance.Cpu.State
 {
     public enum CpuRegister : uint
     {
