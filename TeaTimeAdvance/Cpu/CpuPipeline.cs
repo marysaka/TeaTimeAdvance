@@ -1,8 +1,10 @@
 using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common.Memory;
+using TeaTimeAdvance.Cpu.Instructions;
+using TeaTimeAdvance.Cpu.State;
 
-namespace TeaTimeAdvance.Cpu.State
+namespace TeaTimeAdvance.Cpu
 {
     public class CpuPipeline
     {
@@ -66,9 +68,50 @@ namespace TeaTimeAdvance.Cpu.State
             // FIXME: Do anything else here?
         }
 
+        private static bool ShouldExecute(CpuContext context, uint opcode)
+        {
+            CpuConditionCode cc = (CpuConditionCode)(opcode >> 28);
+            switch (cc)
+            {
+                case CpuConditionCode.AL:
+                    return true;
+                default:
+                    throw new NotImplementedException(cc.ToString());
+            }
+        }
+
         private void Execute(CpuContext context)
         {
-            throw new NotImplementedException();
+            uint opcode = _pipelineCache[(int)PipelineIndex.ExecuteStage];
+
+            bool isThumb = context.State.StatusRegister.HasFlag(CurrentProgramStatusRegister.Thumb);
+
+            // First make sure that we don't have to skip this instruction
+            if (!isThumb && !ShouldExecute(context, opcode))
+            {
+                _busAccessType = BusAccessType.Sequential;
+                context.State.Register(CpuRegister.PC) += ArmInstructionSize;
+            }
+            else
+            {
+                InstructionInfo info;
+
+                if (isThumb)
+                {
+                    info = OpCodeTable.GetThumbInstructionInfo((ushort)opcode);
+                }
+                else
+                {
+                    info = OpCodeTable.GetArmInstructionInfo(opcode);
+                }
+
+                if (info == null)
+                {
+                    throw new NotImplementedException($"Unknown opcode: 0x{opcode:X4}");
+                }
+
+                info.ExecutionHandler(context, opcode);
+            }
         }
 
         public void Update(CpuContext context)
