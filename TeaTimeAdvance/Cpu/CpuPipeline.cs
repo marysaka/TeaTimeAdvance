@@ -71,8 +71,40 @@ namespace TeaTimeAdvance.Cpu
         private static bool ShouldExecute(CpuContext context, uint opcode)
         {
             CpuConditionCode cc = (CpuConditionCode)(opcode >> 28);
+            CurrentProgramStatusRegister cpsr = context.State.StatusRegister;
+
             switch (cc)
             {
+                case CpuConditionCode.EQ:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Zero);
+                case CpuConditionCode.NE:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Zero);
+                case CpuConditionCode.CS:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Carry);
+                case CpuConditionCode.CC:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Carry);
+                case CpuConditionCode.MI:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Negative);
+                case CpuConditionCode.PL:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Negative);
+                case CpuConditionCode.VS:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
+                case CpuConditionCode.VC:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
+                case CpuConditionCode.HI:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Carry) && !cpsr.HasFlag(CurrentProgramStatusRegister.Zero);
+                case CpuConditionCode.LS:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Carry) || cpsr.HasFlag(CurrentProgramStatusRegister.Zero);
+                case CpuConditionCode.GE:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Negative) == cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
+                case CpuConditionCode.LT:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Negative) != cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
+                case CpuConditionCode.GT:
+                    return !cpsr.HasFlag(CurrentProgramStatusRegister.Zero) &&
+                        cpsr.HasFlag(CurrentProgramStatusRegister.Negative) != cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
+                case CpuConditionCode.LE:
+                    return cpsr.HasFlag(CurrentProgramStatusRegister.Zero) ||
+                        cpsr.HasFlag(CurrentProgramStatusRegister.Negative) == cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
                 case CpuConditionCode.AL:
                     return true;
                 default:
