@@ -1,4 +1,3 @@
-using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu.State;
 using TeaTimeAdvance.Scheduler;

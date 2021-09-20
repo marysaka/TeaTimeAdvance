@@ -118,7 +118,7 @@ namespace TeaTimeAdvance.Cpu.State
         UND_flag = 6 << (int)FlagShift,
 
         FlagShift = 5,
-        RegisterMask = 0x10,
-        FlagMask = UND_flag
+        RegisterMask = 0x1F,
+        FlagMask = 0xE0
     }
 }

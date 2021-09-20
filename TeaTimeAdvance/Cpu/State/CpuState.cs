@@ -5,7 +5,7 @@ using TeaTimeAdvance.Common.Memory;
 namespace TeaTimeAdvance.Cpu.State
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct CpuState
+    public class CpuState
     {
         public GeneralPurposeRegisters Registers;
 
@@ -107,7 +107,7 @@ namespace TeaTimeAdvance.Cpu.State
             }
             else if (realRegister == CpuRegister.R15)
             {
-                return ref Registers.Raw.ToSpan()[15];
+                return ref Registers[15];
             }
             else if (realRegister >= CpuRegister.R0 && realRegister <= CpuRegister.R7)
             {
