@@ -1,15 +1,15 @@
 using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common.Memory;
-using TeaTimeAdvance.Cpu.Instructions;
+using TeaTimeAdvance.Cpu.Instruction;
 using TeaTimeAdvance.Cpu.State;
 
 namespace TeaTimeAdvance.Cpu
 {
     public class CpuPipeline
     {
-        private const uint ArmInstructionSize = sizeof(uint);
-        private const uint ThumbInstructionSize = sizeof(ushort);
+        private const uint ArmInstructionSize = InstructionDecoderHelper.ArmInstructionSize;
+        private const uint ThumbInstructionSize = InstructionDecoderHelper.ThumbInstructionSize;
 
         private enum PipelineIndex : uint
         {
@@ -33,6 +33,28 @@ namespace TeaTimeAdvance.Cpu
         {
             _pipelineCache.ToSpan().Fill(UndefinedStateInstruction);
             _busAccessType = BusAccessType.NonSequential;
+        }
+
+        public void ReloadForArm(CpuContext context)
+        {
+            ref uint pc = ref context.State.Register(CpuRegister.PC);
+
+            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read32(pc + 0x00, BusAccessType.NonSequential);
+            _pipelineCache[(int)PipelineIndex.DecodeStage] = context.BusContext.Read32(pc + 0x04, BusAccessType.Sequential);
+            _busAccessType = BusAccessType.Sequential;
+
+            pc += ArmInstructionSize * 2;
+        }
+
+        public void ReloadForThumb(CpuContext context)
+        {
+            ref uint pc = ref context.State.Register(CpuRegister.PC);
+
+            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read16(pc + 0x00, BusAccessType.NonSequential);
+            _pipelineCache[(int)PipelineIndex.DecodeStage] = context.BusContext.Read16(pc + 0x02, BusAccessType.Sequential);
+            _busAccessType = BusAccessType.Sequential;
+
+            pc += ThumbInstructionSize * 2;
         }
 
         private void Fetch(CpuContext context)
@@ -70,7 +92,7 @@ namespace TeaTimeAdvance.Cpu
 
         private static bool ShouldExecute(CpuContext context, uint opcode)
         {
-            CpuConditionCode cc = (CpuConditionCode)(opcode >> 28);
+            CpuConditionCode cc = InstructionDecoderHelper.GetConditionCodeFromOpcode(opcode);
             CurrentProgramStatusRegister cpsr = context.State.StatusRegister;
 
             switch (cc)
@@ -139,8 +161,14 @@ namespace TeaTimeAdvance.Cpu
 
                 if (info == null)
                 {
-                    throw new NotImplementedException($"Unknown opcode: 0x{opcode:X4}");
+                    throw new NotImplementedException($"Unknown opcode: 0x{opcode:X8}");
                 }
+                else if (info.ExecutionHandler == null)
+                {
+                    throw new NotImplementedException($"Unimplemented instruction: \"{info.Disassemble(opcode)}\"");
+                }
+
+                Console.WriteLine($"0x{context.GetRegister(CpuRegister.PC):X8}: {info.Disassemble(opcode)} (0x{opcode:X8})");
 
                 info.ExecutionHandler(context, opcode);
             }

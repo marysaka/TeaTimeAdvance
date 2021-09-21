@@ -75,7 +75,7 @@ namespace TeaTimeAdvance.Bus
 
         private byte UnmappedRead8(uint address)
         {
-            Console.Error.WriteLine($"Invalid 8 bits read at 0x{address:x8}");
+            Console.Error.WriteLine($"Invalid 8 bits read at 0x{address:X8}");
 
             // TODO
             return 0;
@@ -83,7 +83,7 @@ namespace TeaTimeAdvance.Bus
 
         private ushort UnmappedRead16(uint address)
         {
-            Console.Error.WriteLine($"Invalid 16 bits read at 0x{address:x8}");
+            Console.Error.WriteLine($"Invalid 16 bits read at 0x{address:X8}");
 
             // TODO
             return 0;
@@ -91,7 +91,7 @@ namespace TeaTimeAdvance.Bus
 
         private uint UnmappedRead32(uint address)
         {
-            Console.Error.WriteLine($"Invalid 32 bits read at 0x{address:x8}");
+            Console.Error.WriteLine($"Invalid 32 bits read at 0x{address:X8}");
 
             // TODO
             return 0;
@@ -99,21 +99,21 @@ namespace TeaTimeAdvance.Bus
 
         public void UnmappedWrite8(uint address, byte value)
         {
-            Console.Error.WriteLine($"Invalid 8 bits write at 0x{address:x8} (value = 0x{value:x2}");
+            Console.Error.WriteLine($"Invalid 8 bits write at 0x{address:X8} (value = 0x{value:X2}");
 
             // TODO
         }
 
         public void UnmappedWrite16(uint address, ushort value)
         {
-            Console.Error.WriteLine($"Invalid 16 bits write at 0x{address:x8} (value = 0x{value:x4}");
+            Console.Error.WriteLine($"Invalid 16 bits write at 0x{address:X8} (value = 0x{value:X4}");
 
             // TODO
         }
 
         public void UnmappedWrite32(uint address, uint value)
         {
-            Console.Error.WriteLine($"Invalid 32 bits write at 0x{address:x8} (value = 0x{value:x8}");
+            Console.Error.WriteLine($"Invalid 32 bits write at 0x{address:X8} (value = 0x{value:X8}");
 
             // TODO
         }

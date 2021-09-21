@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using static TeaTimeAdvance.Cpu.Instructions.InstructionInfo;
+using static TeaTimeAdvance.Cpu.Instruction.InstructionDisassembler;
+using static TeaTimeAdvance.Cpu.Instruction.InstructionInfo;
+using static TeaTimeAdvance.Cpu.Instruction.InstructionHandler;
 
-namespace TeaTimeAdvance.Cpu.Instructions
+namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static class OpCodeTable
     {
@@ -11,14 +13,17 @@ namespace TeaTimeAdvance.Cpu.Instructions
 
         static OpCodeTable()
         {
-
+            // Branch
+            SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchAndExchange32);
+            SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
+            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32);
         }
 
-        private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler) => Set(encoding, name, executionHandler, _thumbInstructions);
+        private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_thumbInstructions, encoding, name, executionHandler, disassembleHandler);
 
-        private static void SetArm(string encoding, string name, ExecuteInstruction executionHandler) => Set(encoding, name, executionHandler, _armInstructions);
+        private static void SetArm(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_armInstructions, encoding, name, executionHandler, disassembleHandler);
 
-        private static void Set(string encoding, string name, ExecuteInstruction executionHandler, List<InstructionInfo> instructionsRegistry)
+        private static void Set(List<InstructionInfo> instructionsRegistry, string encoding, string name, ExecuteInstruction executionHandler, DisassembleInstruction disassembleHandler)
         {
             int bit = encoding.Length - 1;
             int value = 0;
@@ -68,7 +73,7 @@ namespace TeaTimeAdvance.Cpu.Instructions
 
             if (xBits == 0)
             {
-                instructionsRegistry.Add(new InstructionInfo(xMask, value, name, executionHandler));
+                instructionsRegistry.Add(new InstructionInfo((uint)xMask, (uint)value, name, executionHandler, disassembleHandler));
 
                 return;
             }
@@ -84,7 +89,7 @@ namespace TeaTimeAdvance.Cpu.Instructions
 
                 if (mask != blacklisted)
                 {
-                    instructionsRegistry.Add(new InstructionInfo(xMask, value | mask, name, executionHandler));
+                    instructionsRegistry.Add(new InstructionInfo((uint)xMask, (uint)(value | mask), name, executionHandler, disassembleHandler));
                 }
             }
         }

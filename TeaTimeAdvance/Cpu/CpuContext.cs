@@ -7,10 +7,9 @@ namespace TeaTimeAdvance.Cpu
     public class CpuContext
     {
         public CpuState State { get; }
+        public CpuPipeline Pipeline { get; }
         public SchedulerContext Scheduler { get; }
         public BusContext BusContext { get; }
-
-        private CpuPipeline _pipeline;
 
         public CpuContext(SchedulerContext scheduler, BusContext busContext)
         {
@@ -18,12 +17,12 @@ namespace TeaTimeAdvance.Cpu
             BusContext = busContext;
 
             State = new CpuState();
-            _pipeline = new CpuPipeline();
+            Pipeline = new CpuPipeline();
         }
 
         public void Reset()
         {
-            _pipeline.Reset();
+            Pipeline.Reset();
             State.Reset();
         }
 
@@ -46,7 +45,7 @@ namespace TeaTimeAdvance.Cpu
 
         public void Update()
         {
-            _pipeline.Update(this);
+            Pipeline.Update(this);
         }
     }
 }
