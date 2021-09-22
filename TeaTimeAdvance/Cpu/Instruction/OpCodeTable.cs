@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionDisassembler;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionInfo;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionHandler;
+using System.Diagnostics;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -13,10 +14,67 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         static OpCodeTable()
         {
-            // Branch
+            // Data Processing Format
+            // TODO: implement
+            SetArm("<<<<00x0000xxxxxxxxxxxxxxxxxxxxx", "AND");
+            SetArm("<<<<00x0001xxxxxxxxxxxxxxxxxxxxx", "EOR");
+            SetArm("<<<<00x0010xxxxxxxxxxxxxxxxxxxxx", "SUB");
+            SetArm("<<<<00x0011xxxxxxxxxxxxxxxxxxxxx", "RSB");
+            SetArm("<<<<00x0100xxxxxxxxxxxxxxxxxxxxx", "ADD");
+            SetArm("<<<<00x0101xxxxxxxxxxxxxxxxxxxxx", "ADC");
+            SetArm("<<<<00x0110xxxxxxxxxxxxxxxxxxxxx", "SBC");
+            SetArm("<<<<00x0111xxxxxxxxxxxxxxxxxxxxx", "RSC");
+            SetArm("<<<<00x10001xxxxxxxxxxxxxxxxxxxx", "TST");
+            SetArm("<<<<00x10011xxxxxxxxxxxxxxxxxxxx", "TEQ");
+            SetArm("<<<<00x10101xxxxxxxxxxxxxxxxxxxx", "CMP");
+            SetArm("<<<<00x10111xxxxxxxxxxxxxxxxxxxx", "CMN");
+            SetArm("<<<<00x1100xxxxxxxxxxxxxxxxxxxxx", "ORR");
+            SetArm("<<<<00x1101xxxxxxxxxxxxxxxxxxxxx", "MOV");
+            SetArm("<<<<00x1110xxxxxxxxxxxxxxxxxxxxx", "BIC");
+            SetArm("<<<<00x1111xxxxxxxxxxxxxxxxxxxxx", "MVN");
+
+            // PSR Transfer Format
+            // TODO: implement
+            SetArm("<<<<00010x001111xxxx000000000000", "MRS");
+            SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR");
+            SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR");
+
+            // Multiply Format
+            // TODO: implement
+            SetArm("<<<<0000000xxxxxxxxxxxxx1001xxxx", "MUL");
+            SetArm("<<<<0000001xxxxxxxxxxxxx1001xxxx", "MLA");
+
+            // Multiply Long Format
+            // TODO: implement
+            SetArm("<<<<0000100xxxxxxxxxxxxx1001xxxx", "UMULL");
+            SetArm("<<<<0000101xxxxxxxxxxxxx1001xxxx", "UMLAL");
+            SetArm("<<<<0000110xxxxxxxxxxxxx1001xxxx", "SMULL");
+            SetArm("<<<<0000111xxxxxxxxxxxxx1001xxxx", "SMLAL");
+
+            // Single Data Swap Format
+            // TODO: implement
+            //SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "STR");
+            //SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "LDR");
+
+            // Branch and Exchange Format
             SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchAndExchange32);
+
+            // TODO: Halfword Data Transfer: register offset Format
+            // TODO: Halfword Data Transfer: immediate offset Format
+            // TODO: Single Data Transfer Format
+            // TODO: Undefined Format
+            // TODO: Block Data Transfer Format
+            // TODO: Block Data Transfer Format
+
+            // Branch Format
             SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
-            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32);
+            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
+
+            // TODO: Coprocessor Data Transfer Format
+            // TODO: Coprocessor Data Operation Format
+            // TODO: Coprocessor Data Register Format
+            // TODO: Coprocessor Data Register Format
+            // TODO: Software Interrupt
         }
 
         private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_thumbInstructions, encoding, name, executionHandler, disassembleHandler);
@@ -73,7 +131,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             if (xBits == 0)
             {
-                instructionsRegistry.Add(new InstructionInfo((uint)xMask, (uint)value, name, executionHandler, disassembleHandler));
+                instructionsRegistry.Insert(0, new InstructionInfo((uint)xMask, (uint)value, name, executionHandler, disassembleHandler));
 
                 return;
             }
@@ -89,7 +147,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
                 if (mask != blacklisted)
                 {
-                    instructionsRegistry.Add(new InstructionInfo((uint)xMask, (uint)(value | mask), name, executionHandler, disassembleHandler));
+                    instructionsRegistry.Insert(0, new InstructionInfo((uint)xMask, (uint)(value | mask), name, executionHandler, disassembleHandler));
                 }
             }
         }

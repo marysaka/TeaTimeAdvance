@@ -8,7 +8,7 @@ namespace TeaTimeAdvance.Tests.Bus
     class BusContextTests
     {
         [Test]
-        public void EsureSimpleTest()
+        public void EnsureSimpleTest()
         {
             BusContext bus = new BusContext(new SchedulerContext());
 

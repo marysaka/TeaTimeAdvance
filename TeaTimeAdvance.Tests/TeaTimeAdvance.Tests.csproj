@@ -16,4 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\TeaTimeAdvance\TeaTimeAdvance.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cpu\Instruction\Handler\" />
+  </ItemGroup>
 </Project>

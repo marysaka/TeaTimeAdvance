@@ -9,7 +9,7 @@ namespace TeaTimeAdvance.Tests.Scheduler
         [TestCase(2UL, 1UL, ExpectedResult = false)]
         [TestCase(3UL, 4UL, ExpectedResult = true)]
         [TestCase(4UL, 3UL, ExpectedResult = false)]
-        public bool EsureSimpleTest(ulong thresholdCyclesCount, ulong updateCyclesCount)
+        public bool EnsureSimpleTest(ulong thresholdCyclesCount, ulong updateCyclesCount)
         {
             SchedulerContext scheduler = new SchedulerContext();
 
@@ -27,7 +27,7 @@ namespace TeaTimeAdvance.Tests.Scheduler
         }
 
         [Test(ExpectedResult = false)]
-        public bool EsureSimpleCancelTest()
+        public bool EnsureSimpleCancelTest()
         {
             SchedulerContext scheduler = new SchedulerContext();
 
