@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionDisassembler;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionInfo;
 using static TeaTimeAdvance.Cpu.Instruction.InstructionHandler;
-using System.Diagnostics;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -103,6 +102,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
             // Branch Format
             SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
             SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
+
+            // TODO: Thumb
         }
 
         private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_thumbInstructions, encoding, name, executionHandler, disassembleHandler);
@@ -182,11 +183,13 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static InstructionInfo GetArmInstructionInfo(uint opcode)
         {
+            // TODO: fast LUT
             return GetInstructionInfo(_armInstructions, opcode);
         }
 
         public static InstructionInfo GetThumbInstructionInfo(ushort opcode)
         {
+            // TODO: fast LUT
             return GetInstructionInfo(_thumbInstructions, opcode);
         }
 

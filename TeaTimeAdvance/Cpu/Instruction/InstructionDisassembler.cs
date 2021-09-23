@@ -9,17 +9,17 @@ namespace TeaTimeAdvance.Cpu.Instruction
         {
             if (value < 0)
             {
-                return $"#-0x{value:x}";
+                return $"#-0x{value:X}";
             }
             else
             {
-                return $"#0x{value:x}";
+                return $"#0x{value:X}";
             }
         }
 
         private static string FormatUnsignedImmediate(uint value)
         {
-            return $"#0x{value:x}";
+            return $"#0x{value:X}";
         }
 
         private static string FormatSignedImmediate24(uint rawValue)
