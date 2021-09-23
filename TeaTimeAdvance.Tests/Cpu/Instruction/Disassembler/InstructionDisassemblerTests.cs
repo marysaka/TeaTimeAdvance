@@ -6,7 +6,6 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
     class InstructionDisassemblerTests
     {
         // TODO: Test all variantes of all register and immediate variants.
-
         // Data Processing Format
         [TestCase(0xE0000000, ExpectedResult = "AND", TestName = "AND naming (register)")]
         [TestCase(0xE2000000, ExpectedResult = "AND", TestName = "AND naming (immediate)")]
@@ -57,9 +56,46 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         [TestCase(0xE0C00090, ExpectedResult = "SMULL", TestName = "SMULL naming")]
         [TestCase(0xE0E00090, ExpectedResult = "SMLAL", TestName = "SMLAL naming")]
 
-        // Single Data Swap Format
-        //[TestCase(0xE5000000, ExpectedResult = "LDR", TestName = "LDR naming (immediate)")]
-        //[TestCase(0xE7000000, ExpectedResult = "LDR", TestName = "LDR naming (register)")]
+        // Single Data Transfer Format
+        [TestCase(0xE4000000, ExpectedResult = "STR", TestName = "STR naming (immediate)")]
+        [TestCase(0xE5900000, ExpectedResult = "LDR", TestName = "LDR naming (immediate)")]
+        [TestCase(0xE6800000, ExpectedResult = "STR", TestName = "STR naming (register)")]
+        [TestCase(0xE7900000, ExpectedResult = "LDR", TestName = "LDR naming (register)")]
+
+        // Halfword Data Transfer: register offset Format
+        [TestCase(0xE19000B0, ExpectedResult = "LDRH", TestName = "LDRH naming (register)")]
+        [TestCase(0xE18000B0, ExpectedResult = "STRH", TestName = "STRH naming (register)")]
+        [TestCase(0xE19000D0, ExpectedResult = "LDRSB", TestName = "LDRSB naming (register)")]
+
+        // Halfword Data Transfer: immediate offset Format
+        [TestCase(0xE1D000F0, ExpectedResult = "LDRH", TestName = "LDRH naming (immediate)")]
+        [TestCase(0xE1C000B0, ExpectedResult = "STRH", TestName = "STRH naming (immediate)")]
+        [TestCase(0xE1D000D0, ExpectedResult = "LDRSB", TestName = "LDRSB naming (immediate)")]
+
+        // Data Transfer
+        [TestCase(0xE8800001, ExpectedResult = "STM", TestName = "STM naming")]
+        [TestCase(0xE8900001, ExpectedResult = "LDM", TestName = "LDM naming")]
+
+        // Singla Data Swap
+        [TestCase(0xE1000090, ExpectedResult = "SWP", TestName = "SWP naming")]
+        [TestCase(0xE1400090, ExpectedResult = "SWPB", TestName = "SWPB naming")]
+
+        // Software Interrupt
+        [TestCase(0xEF000000, ExpectedResult = "SWI", TestName = "SWI naming")]
+
+        // Coprocessor Data Operations
+        [TestCase(0xEE000000, ExpectedResult = "CDP", TestName = "CDP naming")]
+
+        // Coprocessor Data Transfers
+        [TestCase(0xED900000, ExpectedResult = "LDC", TestName = "LDC naming")]
+        [TestCase(0xED800000, ExpectedResult = "STC", TestName = "STC naming")]
+
+        //  Coprocessor Register Transfers
+        [TestCase(0xEE000010, ExpectedResult = "MCR", TestName = "MCR naming")]
+        [TestCase(0xEE100010, ExpectedResult = "MRC", TestName = "MRC naming")]
+
+        // Undefined Format
+        [TestCase(0xE6000010, ExpectedResult = "UND", TestName = "UND naming")]
         public string EnsureArmInstructionNameMatching(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);

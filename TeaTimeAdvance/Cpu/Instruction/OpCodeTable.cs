@@ -39,10 +39,17 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR");
             SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR");
 
-            // Multiply Format
+            // Halfword Data Transfer: register offset Format
             // TODO: implement
-            SetArm("<<<<0000000xxxxxxxxxxxxx1001xxxx", "MUL");
-            SetArm("<<<<0000001xxxxxxxxxxxxx1001xxxx", "MLA");
+            SetArm("<<<<000xx0x1xxxxxxxx00001xx1xxxx", "LDRH");
+            SetArm("<<<<000xx0x0xxxxxxxx00001xx1xxxx", "STRH");
+            SetArm("<<<<000xx0x1xxxxxxxx00001x01xxxx", "LDRSB");
+
+            // Halfword Data Transfer: immediate offset Format
+            // TODO: implement
+            SetArm("<<<<000xx1x1xxxxxxxxxxxx1xx1xxxx", "LDRH");
+            SetArm("<<<<000xx1x0xxxxxxxxxxxx1xx1xxxx", "STRH");
+            SetArm("<<<<000xx1x1xxxxxxxxxxxx1x01xxxx", "LDRSB");
 
             // Multiply Long Format
             // TODO: implement
@@ -51,30 +58,51 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<0000110xxxxxxxxxxxxx1001xxxx", "SMULL");
             SetArm("<<<<0000111xxxxxxxxxxxxx1001xxxx", "SMLAL");
 
-            // Single Data Swap Format
+            // Single Data Transfer Format
             // TODO: implement
-            //SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "STR");
-            //SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "LDR");
+            SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "STR");
+            SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR");
 
             // Branch and Exchange Format
             SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchAndExchange32);
 
-            // TODO: Halfword Data Transfer: register offset Format
-            // TODO: Halfword Data Transfer: immediate offset Format
-            // TODO: Single Data Transfer Format
-            // TODO: Undefined Format
-            // TODO: Block Data Transfer Format
-            // TODO: Block Data Transfer Format
+            // Multiply Format
+            // TODO: implement
+            SetArm("<<<<0000000xxxxxxxxxxxxx1001xxxx", "MUL");
+            SetArm("<<<<0000001xxxxxxxxxxxxx1001xxxx", "MLA");
+
+            // Block Data Transfer
+            // TODO: implement
+            SetArm("<<<<100xxxx0xxxxxxxxxxxxxxxxxxxx", "STM");
+            SetArm("<<<<100xxxx1xxxxxxxxxxxxxxxxxxxx", "LDM");
+
+            // Single Data Swap Format
+            // TODO: implement
+            SetArm("<<<<00010000xxxxxxxx00001001xxxx", "SWP");
+            SetArm("<<<<00010100xxxxxxxx00001001xxxx", "SWPB");
+
+            // Software Interrupt
+            // TODO: implement
+            SetArm("<<<<1111xxxxxxxxxxxxxxxxxxxxxxxx", "SWI");
+
+            // Coprocessor Data Operations Format
+            // TODO: implement
+            SetArm("<<<<1110xxxxxxxxxxxxxxxxxxx0xxxx", "CDP");
+
+            // Coprocessor Data Transfers Format
+            // TODO: implement
+            SetArm("<<<<110xxxx0xxxxxxxxxxxxxxxxxxxx", "STC");
+            SetArm("<<<<110xxxx1xxxxxxxxxxxxxxxxxxxx", "LDC");
+            SetArm("<<<<1110xxx0xxxxxxxxxxxxxxx1xxxx", "MCR");
+            SetArm("<<<<1110xxx1xxxxxxxxxxxxxxx1xxxx", "MRC");
+
+            // Undefined Format
+            // TODO: implement
+            SetArm("<<<<011xxxxxxxxxxxxxxxxxxxx1xxxx", "UND");
 
             // Branch Format
             SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
             SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
-
-            // TODO: Coprocessor Data Transfer Format
-            // TODO: Coprocessor Data Operation Format
-            // TODO: Coprocessor Data Register Format
-            // TODO: Coprocessor Data Register Format
-            // TODO: Software Interrupt
         }
 
         private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_thumbInstructions, encoding, name, executionHandler, disassembleHandler);
