@@ -107,5 +107,41 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
 
             return info.Name;
         }
+
+        // Data Processing Format
+        [TestCase(0xE1A0000F, ExpectedResult = "MOV R0, R15", TestName = "MOV disassemly (register)")]
+        [TestCase(0xE1B0000F, ExpectedResult = "MOVS R0, R15", TestName = "MOVS disassemly (register)")]
+        [TestCase(0xE3E00301, ExpectedResult = "MVN R0, #0x4000000", TestName = "MVN disassemly (immediate)")]
+        [TestCase(0xE3F00301, ExpectedResult = "MVNS R0, #0x4000000", TestName = "MVNS disassemly (immediate)")]
+        [TestCase(0xE1E0000F, ExpectedResult = "MVN R0, R15", TestName = "MVN disassemly (register)")]
+        [TestCase(0xE1F0000F, ExpectedResult = "MVNS R0, R15", TestName = "MVNS disassemly (register)")]
+        [TestCase(0xE3A00301, ExpectedResult = "MOV R0, #0x4000000", TestName = "MOV disassemly (immediate)")]
+        [TestCase(0xE3B00301, ExpectedResult = "MOVS R0, #0x4000000", TestName = "MOVS disassemly (immediate)")]
+        [TestCase(0xE1A00010, ExpectedResult = "MOV R0, R0, LSL R0", TestName = "MOV disassemly (register, LSL register)")]
+        [TestCase(0xE1A00030, ExpectedResult = "MOV R0, R0, LSR R0", TestName = "MOV disassemly (register, LSR register)")]
+        [TestCase(0xE1A00050, ExpectedResult = "MOV R0, R0, ASR R0", TestName = "MOV disassemly (register, ASR register)")]
+        [TestCase(0xE1A00070, ExpectedResult = "MOV R0, R0, ROR R0", TestName = "MOV disassemly (register, ROR register)")]
+        [TestCase(0xE1A00100, ExpectedResult = "MOV R0, R0, LSL #0x2", TestName = "MOV disassemly (register, LSL immediate)")]
+        [TestCase(0xE1A00120, ExpectedResult = "MOV R0, R0, LSR #0x2", TestName = "MOV disassemly (register, LSR immediate)")]
+        [TestCase(0xE1A00140, ExpectedResult = "MOV R0, R0, ASR #0x2", TestName = "MOV disassemly (register, ASR immediate)")]
+        [TestCase(0xE1A00160, ExpectedResult = "MOV R0, R0, ROR #0x2", TestName = "MOV disassemly (register, ROR immediate)")]
+        [TestCase(0xE3500301, ExpectedResult = "CMP R0, #0x4000000", TestName = "CMP disassemly (immediate)")]
+        [TestCase(0xE1500000, ExpectedResult = "CMP R0, R0", TestName = "CMP disassemly (register)")]
+        [TestCase(0xE1500050, ExpectedResult = "CMP R0, R0, ASR R0", TestName = "CMP disassemly (register, ASR register)")]
+        [TestCase(0xE1500100, ExpectedResult = "CMP R0, R0, LSL #0x2", TestName = "CMP disassemly (register, LSL immediate)")]
+        [TestCase(0xE0000000, ExpectedResult = "AND R0, R0, R0", TestName = "AND disassemly (register)")]
+        [TestCase(0xE0000010, ExpectedResult = "AND R0, R0, R0, LSL R0", TestName = "AND disassemly (register, LSL register)")]
+        [TestCase(0xE0000100, ExpectedResult = "AND R0, R0, R0, LSL #0x2", TestName = "AND disassemly (register, LSL immediate)")]
+        public string EnsureArmInstructionDisassemblyMatching(uint opcode)
+        {
+            InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
+
+            if (info == null)
+            {
+                return null;
+            }
+
+            return info.Disassemble(opcode);
+        }
     }
 }
