@@ -34,9 +34,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // PSR Transfer Format
             // TODO: implement
-            SetArm("<<<<00010x001111xxxx000000000000", "MRS");
-            SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR");
-            SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR");
+            SetArm("<<<<00010x001111xxxx000000000000", "MRS", null, DisassemblePSRTransferDisassembler32);
+            SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR", null, DisassemblePSRTransferDisassembler32);
+            SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR", null, DisassemblePSRTransferDisassembler32);
 
             // Halfword Data Transfer: register offset Format
             // TODO: implement

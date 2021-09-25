@@ -132,6 +132,15 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         [TestCase(0xE0000000, ExpectedResult = "AND R0, R0, R0", TestName = "AND disassemly (register)")]
         [TestCase(0xE0000010, ExpectedResult = "AND R0, R0, R0, LSL R0", TestName = "AND disassemly (register, LSL register)")]
         [TestCase(0xE0000100, ExpectedResult = "AND R0, R0, R0, LSL #0x2", TestName = "AND disassemly (register, LSL immediate)")]
+
+        // PSR Transfer Format
+        [TestCase(0xE10F0000, ExpectedResult = "MRS R0, CPSR", TestName = "MRS disassemly (register, CPSR)")]
+        [TestCase(0xE14F0000, ExpectedResult = "MRS R0, SPSR", TestName = "MRS disassemly (register, SPSR)")]
+        [TestCase(0xE169F000, ExpectedResult = "MSR SPSR, R0", TestName = "MSR disassemly (register, SPSR)")]
+        [TestCase(0xE129F000, ExpectedResult = "MSR CPSR, R0", TestName = "MSR disassemly (register, CPSR)")]
+        [TestCase(0xE369F000, ExpectedResult = "MSR SPSR, #0x0", TestName = "MSR disassemly (immediate, SPSR)")]
+        [TestCase(0xE329F000, ExpectedResult = "MSR CPSR, #0x0", TestName = "MSR disassemly (immediate, CPSR)")]
+        [TestCase(0xE121F000, ExpectedResult = "MSR CPSR_C, R0", TestName = "MSR disassemly (register, CPSR_c)")]
         public string EnsureArmInstructionDisassemblyMatching(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
