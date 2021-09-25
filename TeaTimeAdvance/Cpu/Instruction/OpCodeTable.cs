@@ -40,35 +40,35 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Halfword Data Transfer: register offset Format
             // TODO: implement
-            SetArm("<<<<000xx0x1xxxxxxxx00001xx1xxxx", "LDRH");
-            SetArm("<<<<000xx0x0xxxxxxxx00001xx1xxxx", "STRH");
-            SetArm("<<<<000xx0x1xxxxxxxx00001x01xxxx", "LDRSB");
+            SetArm("<<<<000xx0x1xxxxxxxx00001xx1xxxx", "LDRH", null, DisassembleHalfwordDataTransferRegister32);
+            SetArm("<<<<000xx0x0xxxxxxxx00001xx1xxxx", "STRH", null, DisassembleHalfwordDataTransferRegister32);
+            SetArm("<<<<000xx0x1xxxxxxxx00001x01xxxx", "LDRSB", null, DisassembleHalfwordDataTransferRegister32);
 
             // Halfword Data Transfer: immediate offset Format
             // TODO: implement
-            SetArm("<<<<000xx1x1xxxxxxxxxxxx1xx1xxxx", "LDRH");
-            SetArm("<<<<000xx1x0xxxxxxxxxxxx1xx1xxxx", "STRH");
-            SetArm("<<<<000xx1x1xxxxxxxxxxxx1x01xxxx", "LDRSB");
+            SetArm("<<<<000xx1x1xxxxxxxxxxxx1xx1xxxx", "LDRH", null, DisassembleHalfwordDataTransferImmediate32);
+            SetArm("<<<<000xx1x0xxxxxxxxxxxx1xx1xxxx", "STRH", null, DisassembleHalfwordDataTransferImmediate32);
+            SetArm("<<<<000xx1x1xxxxxxxxxxxx1x01xxxx", "LDRSB", null, DisassembleHalfwordDataTransferImmediate32);
 
             // Multiply Long Format
             // TODO: implement
-            SetArm("<<<<0000100xxxxxxxxxxxxx1001xxxx", "UMULL");
-            SetArm("<<<<0000101xxxxxxxxxxxxx1001xxxx", "UMLAL");
-            SetArm("<<<<0000110xxxxxxxxxxxxx1001xxxx", "SMULL");
-            SetArm("<<<<0000111xxxxxxxxxxxxx1001xxxx", "SMLAL");
+            SetArm("<<<<0000100xxxxxxxxxxxxx1001xxxx", "UMULL", null, DisassembleMultiplyLong32);
+            SetArm("<<<<0000101xxxxxxxxxxxxx1001xxxx", "UMLAL", null, DisassembleMultiplyLong32);
+            SetArm("<<<<0000110xxxxxxxxxxxxx1001xxxx", "SMULL", null, DisassembleMultiplyLong32);
+            SetArm("<<<<0000111xxxxxxxxxxxxx1001xxxx", "SMLAL", null, DisassembleMultiplyLong32);
 
             // Single Data Transfer Format
             // TODO: implement
-            SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "STR");
-            SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR");
+            SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "STR", null, DisassembleSingleDataTransfer32);
+            SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR", null, DisassembleSingleDataTransfer32);
 
             // Branch and Exchange Format
             SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchRegister32);
 
             // Multiply Format
             // TODO: implement
-            SetArm("<<<<0000000xxxxxxxxxxxxx1001xxxx", "MUL");
-            SetArm("<<<<0000001xxxxxxxxxxxxx1001xxxx", "MLA");
+            SetArm("<<<<0000000xxxxxxxxxxxxx1001xxxx", "MUL", null, DisassembleMultiply32);
+            SetArm("<<<<0000001xxxxxxxxxxxxx1001xxxx", "MLA", null, DisassembleMultiply32);
 
             // Block Data Transfer
             // TODO: implement

@@ -17,9 +17,16 @@ namespace TeaTimeAdvance.Cpu.Instruction
             }
         }
 
-        private static string FormatUnsignedImmediate(uint value)
+        private static string FormatUnsignedImmediate(uint value, bool forceNegative = false)
         {
-            return $"#0x{value:X}";
+            if (forceNegative)
+            {
+                return $"#-0x{value:X}";
+            }
+            else
+            {
+                return $"#0x{value:X}";
+            }
         }
 
         private static string FormatSignedImmediate24(uint rawValue)

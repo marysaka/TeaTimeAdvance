@@ -19,7 +19,7 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition
 
         public CpuPSRFields Fields => (CpuPSRFields)(Opcode >> 16) & CpuPSRFields.Mask;
 
-        // Register shift immediate form
+        // Register immediate form
         public CpuRegister Rm => ((IInstructionFormat)this).GetRegisterByIndex(0);
 
         // Immediate form
