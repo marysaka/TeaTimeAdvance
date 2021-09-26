@@ -175,10 +175,19 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         [TestCase(0x01D0B0B0U, ExpectedResult = "LDRHEQ R11, [R0]", TestName = "LDRH disassemly (register, post-indexing, negative, no writeback)")]
         [TestCase(0xE1C431B4U, ExpectedResult = "STRH R3, [R4, #0x14]", TestName = "STRH disassemly (register, pre-indexing, no writeback)")]
 
-        // Data Transfer
-        [TestCase(0xE8800007, ExpectedResult = "STMIA R0, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, no writeback)")]
-        [TestCase(0xE8C00007, ExpectedResult = "STMIA R0, {R0, R1, R2}^", TestName = "STMIA disassemly (pre-indexing, no writeback, current bank)")]
-        [TestCase(0xE8A00007, ExpectedResult = "STMIA R0!, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, writeback, current bank)")]
+        // Data Transfer Format
+        [TestCase(0xE8800007U, ExpectedResult = "STMIA R0, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, no writeback)")]
+        [TestCase(0xE8C00007U, ExpectedResult = "STMIA R0, {R0, R1, R2}^", TestName = "STMIA disassemly (pre-indexing, no writeback, current bank)")]
+        [TestCase(0xE8A00007U, ExpectedResult = "STMIA R0!, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, writeback, current bank)")]
+
+        // Single Data Swap Format
+        [TestCase(0xE1020091U, ExpectedResult = "SWP R0, R1, [R2]", TestName = "SWP disassemly")]
+        [TestCase(0xE1442093U, ExpectedResult = "SWPB R2, R3, [R4]", TestName = "SWP disassemly (byte transfer)")]
+        [TestCase(0x01010090U, ExpectedResult = "SWPEQ R0, R0, [R1]", TestName = "SWP disassemly (control code EQ)")]
+
+        // Software Interrupt
+        [TestCase(0xEF000000U, ExpectedResult = "SWI #0x0", TestName = "SWI disassemly #1")]
+        [TestCase(0xEFDEADBEU, ExpectedResult = "SWI #0xDEADBE", TestName = "SWI disassemly #2")]
         public string EnsureArmInstructionDisassemblyMatching(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
