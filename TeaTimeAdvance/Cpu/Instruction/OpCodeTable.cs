@@ -110,7 +110,120 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
             SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
 
-            // TODO: Thumb
+
+            // Move Shifted Register Format
+            // TODO: implement
+            SetThumb("00000xxxxxxxxxxx", "LSL");
+            SetThumb("00001xxxxxxxxxxx", "LSR");
+            SetThumb("00010xxxxxxxxxxx", "ASR");
+
+            // Add / Subtract Format
+            // TODO: implement
+            SetThumb("00011x0xxxxxxxxx", "ADD");
+            SetThumb("00011x1xxxxxxxxx", "ADD");
+
+            // Move / Compare / Add / Subtract Immediate Format
+            // TODO: implement
+            SetThumb("00100xxxxxxxxxxx", "MOV");
+            SetThumb("00101xxxxxxxxxxx", "CMP");
+            SetThumb("00110xxxxxxxxxxx", "ADD");
+            SetThumb("00111xxxxxxxxxxx", "SUB");
+
+
+            // ALU Operations Format
+            // TODO: implement
+            SetThumb("0100000000xxxxxx", "AND");
+            SetThumb("0100000001xxxxxx", "EOR");
+            SetThumb("0100000010xxxxxx", "LSL");
+            SetThumb("0100000011xxxxxx", "LSR");
+            SetThumb("0100000100xxxxxx", "ASR");
+            SetThumb("0100000101xxxxxx", "ADC");
+            SetThumb("0100000110xxxxxx", "SBC");
+            SetThumb("0100000111xxxxxx", "ROR");
+            SetThumb("0100001000xxxxxx", "TST");
+            SetThumb("0100001001xxxxxx", "NEG");
+            SetThumb("0100001010xxxxxx", "CMP");
+            SetThumb("0100001011xxxxxx", "CMN");
+            SetThumb("0100001100xxxxxx", "ORR");
+            SetThumb("0100001101xxxxxx", "MUL");
+            SetThumb("0100001110xxxxxx", "BIC");
+            SetThumb("0100001111xxxxxx", "MVN");
+
+            // Hi Register Operations / Branch Exchange Format
+            // TODO: implement
+            SetThumb("01000100xxxxxxxx", "ADD");
+            SetThumb("01000101xxxxxxxx", "CMP");
+            SetThumb("01000110xxxxxxxx", "MOV");
+            SetThumb("01000111xxxxxxxx", "BX");
+
+            // PC-relative Load Format
+            // TODO: implement
+            SetThumb("01001xxxxxxxxxxx", "LDR");
+
+            // Load / Store With Register Offset Format
+            // TODO: implement
+            SetThumb("0101000xxxxxxxxx", "STR");
+            SetThumb("0101010xxxxxxxxx", "STRB");
+            SetThumb("0101100xxxxxxxxx", "LDR");
+            SetThumb("0101110xxxxxxxxx", "LDRB");
+
+            // Load / Store sign-extended Byte / Halfword Format
+            // TODO: implement
+            SetThumb("0101001xxxxxxxxx", "STRH");
+            SetThumb("0101011xxxxxxxxx", "LDSB");
+            SetThumb("0101101xxxxxxxxx", "LDRH");
+            SetThumb("0101111xxxxxxxxx", "LDSH");
+
+            // Load / Store With Immediate Offset Format
+            // TODO: implement
+            SetThumb("01100xxxxxxxxxxx", "STR");
+            SetThumb("01101xxxxxxxxxxx", "LDR");
+            SetThumb("01110xxxxxxxxxxx", "STRB");
+            SetThumb("01111xxxxxxxxxxx", "LDRB");
+
+            // Load / Store Halfword Format
+            // TODO: implement
+            SetThumb("10000xxxxxxxxxxx", "STRH");
+            SetThumb("10001xxxxxxxxxxx", "LDRH");
+
+            // SP-relative Load / Store Format
+            // TODO: implement
+            SetThumb("10010xxxxxxxxxxx", "STR");
+            SetThumb("10011xxxxxxxxxxx", "LDR");
+
+            // Load Address Format
+            // TODO: implement
+            SetThumb("1010xxxxxxxxxxxx", "ADD");
+
+            // Add Offset To Stack Pointer Format
+            // TODO: implement
+            SetThumb("1011xxxxxxxxxxxx", "ADD");
+
+            // Push / Pop Registers Format
+            // TODO: implement
+            SetThumb("1011010xxxxxxxxx", "PUSH");
+            SetThumb("1011110xxxxxxxxx", "POP");
+
+            // Multiple Load / Store Format
+            // TODO: implement
+            SetThumb("11000xxxxxxxxxxx", "LDMIA");
+            SetThumb("11001xxxxxxxxxxx", "STMIA");
+
+            // Conditional Branch Format
+            // TODO: implement
+            SetThumb("1101xxxxxxxxxxxx", "B");
+
+            // Software Interrupt Format
+            // TODO: implement
+            SetThumb("11011111xxxxxxxx", "SMI");
+
+            // Unconditional Branch Format
+            // TODO: implement
+            SetThumb("11100xxxxxxxxxxx", "B");
+
+            // Long Branch With Link Format
+            // TODO: implement
+            SetThumb("1111xxxxxxxxxxxx", "BL");
         }
 
         private static void SetThumb(string encoding, string name, ExecuteInstruction executionHandler = null, DisassembleInstruction disassembleHandler = null) => Set(_thumbInstructions, encoding, name, executionHandler, disassembleHandler);

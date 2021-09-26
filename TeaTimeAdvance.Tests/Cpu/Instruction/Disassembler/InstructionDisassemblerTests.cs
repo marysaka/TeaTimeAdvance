@@ -102,7 +102,7 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
 
         // Undefined Format
         [TestCase(0xE6000010, ExpectedResult = "UND", TestName = "UND naming")]
-        public string EnsureArmInstructionNameMatching(uint opcode)
+        public string EnsureArmInstructionNameMatching32(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
 
@@ -188,7 +188,7 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         // Software Interrupt
         [TestCase(0xEF000000U, ExpectedResult = "SWI #0x0", TestName = "SWI disassemly #1")]
         [TestCase(0xEFDEADBEU, ExpectedResult = "SWI #0xDEADBE", TestName = "SWI disassemly #2")]
-        public string EnsureArmInstructionDisassemblyMatching(uint opcode)
+        public string EnsureArmInstructionDisassemblyMatching32(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
 

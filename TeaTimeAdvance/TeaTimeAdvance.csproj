@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Cpu\Instruction\Definition\Thumb\" />
     <Folder Include="Cpu\Instruction\Disassembler\Thumb\" />
     <Folder Include="Cpu\Instruction\Handler\Thumb\" />
   </ItemGroup>
