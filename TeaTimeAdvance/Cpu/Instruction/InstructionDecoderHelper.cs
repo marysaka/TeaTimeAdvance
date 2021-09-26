@@ -18,10 +18,5 @@ namespace TeaTimeAdvance.Cpu.Instruction
         {
             return (CpuRegister)(opcode >> shift) & CpuRegister.UserRegisterMask;
         }
-
-        public static int DecodeS24(uint value)
-        {
-            return (int)(((ulong)value << 40) >> 38);
-        }
     }
 }

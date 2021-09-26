@@ -63,7 +63,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR", null, DisassembleSingleDataTransfer32);
 
             // Branch and Exchange Format
-            SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchRegister32);
+            SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchExchange32);
 
             // Multiply Format
             // TODO: implement
@@ -107,8 +107,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<011xxxxxxxxxxxxxxxxxxxx1xxxx", "UND");
 
             // Branch Format
-            SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranchImmediate32);
-            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranchImmediate32);
+            SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
+            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
 
             // TODO: Thumb
         }

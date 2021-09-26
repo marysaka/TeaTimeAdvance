@@ -1,4 +1,5 @@
-﻿using TeaTimeAdvance.Cpu.State;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+using TeaTimeAdvance.Cpu.State;
 
 using static TeaTimeAdvance.Cpu.Instruction.InstructionDecoderHelper;
 
@@ -8,33 +9,44 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static void Branch32(CpuContext context, uint opcode)
         {
+            BranchFormat format = new BranchFormat
+            {
+                Opcode = opcode
+            };
+
             ref uint pc = ref context.State.Register(CpuRegister.PC);
 
-            int immediate = DecodeS24(opcode);
-
-            pc = (uint)((int)pc + immediate);
+            pc = (uint)((int)pc + format.Offset);
 
             context.Pipeline.ReloadForArm(context);
         }
 
         public static void BranchAndLink32(CpuContext context, uint opcode)
         {
-            ref uint pc = ref context.State.Register(CpuRegister.PC);
+            BranchFormat format = new BranchFormat
+            {
+                Opcode = opcode
+            };
 
-            int address = DecodeS24(opcode);
+            ref uint pc = ref context.State.Register(CpuRegister.PC);
 
             context.SetRegister(CpuRegister.LR, pc - ArmInstructionSize);
 
-            pc = (uint)((int)pc + address);
+            pc = (uint)((int)pc + format.Offset);
 
             context.Pipeline.ReloadForArm(context);
         }
 
         public static void BranchAndExchange32(CpuContext context, uint opcode)
         {
+            BranchExchangeFormat format = new BranchExchangeFormat
+            {
+                Opcode = opcode
+            };
+
             ref uint pc = ref context.State.Register(CpuRegister.PC);
 
-            uint address = GetRegister(context, opcode, 0);
+            uint address = context.GetRegister(format.Rn);
 
             if ((address & 1) != 0)
             {

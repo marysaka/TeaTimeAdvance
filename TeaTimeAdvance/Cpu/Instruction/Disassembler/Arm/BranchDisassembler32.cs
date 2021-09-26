@@ -1,15 +1,27 @@
-﻿namespace TeaTimeAdvance.Cpu.Instruction
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+
+namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static partial class InstructionDisassembler
     {
-        public static string DisassembleBranchRegister32(InstructionInfo info, uint opcode)
+        public static string DisassembleBranchExchange32(InstructionInfo info, uint opcode)
         {
-            return $"{info.Name}{GetConditionCodeName(opcode)} {GetRegisterName(opcode, 0)}";
+            BranchExchangeFormat format = new BranchExchangeFormat
+            {
+                Opcode = opcode
+            };
+
+            return $"{info.Name}{GetConditionCodeName(opcode)} {format.Rn}";
         }
 
-        public static string DisassembleBranchImmediate32(InstructionInfo info, uint opcode)
+        public static string DisassembleBranch32(InstructionInfo info, uint opcode)
         {
-            return $"{info.Name}{GetConditionCodeName(opcode)} {FormatSignedImmediate24(opcode)}";
+            BranchFormat format = new BranchFormat
+            {
+                Opcode = opcode
+            };
+
+            return $"{info.Name}{GetConditionCodeName(opcode)} {FormatSignedImmediate(format.Offset)}";
         }
     }
 }

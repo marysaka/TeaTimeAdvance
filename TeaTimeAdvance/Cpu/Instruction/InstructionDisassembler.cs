@@ -29,16 +29,6 @@ namespace TeaTimeAdvance.Cpu.Instruction
             }
         }
 
-        private static string FormatSignedImmediate24(uint rawValue)
-        {
-            return FormatSignedImmediate(DecodeS24(rawValue));
-        }
-
-        private static string GetRegisterName(uint opcode, int shift)
-        {
-            return GetCpuRegisterFromOpcode(opcode, shift).ToString();
-        }
-
         public static string GetConditionCodeName(uint opcode)
         {
             CpuConditionCode conditionCode = GetConditionCodeFromOpcode(opcode);
