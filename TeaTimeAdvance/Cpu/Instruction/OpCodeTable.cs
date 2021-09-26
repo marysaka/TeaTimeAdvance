@@ -72,8 +72,17 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Block Data Transfer
             // TODO: implement
-            SetArm("<<<<100xxxx0xxxxxxxxxxxxxxxxxxxx", "STM");
-            SetArm("<<<<100xxxx1xxxxxxxxxxxxxxxxxxxx", "LDM");
+            //SetArm("<<<<100xxxx0xxxxxxxxxxxxxxxxxxxx", "STM");
+            //SetArm("<<<<100xxxx1xxxxxxxxxxxxxxxxxxxx", "LDM");
+            SetArm("<<<<10000xx0xxxxxxxxxxxxxxxxxxxx", "STMDA", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10001xx0xxxxxxxxxxxxxxxxxxxx", "STMIA", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10010xx0xxxxxxxxxxxxxxxxxxxx", "STMDB", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10011xx0xxxxxxxxxxxxxxxxxxxx", "STMIB", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10000xx1xxxxxxxxxxxxxxxxxxxx", "LDMDA", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10001xx1xxxxxxxxxxxxxxxxxxxx", "LDMIA", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10010xx1xxxxxxxxxxxxxxxxxxxx", "LDMDB", null, DisassembleBlockDataTransferDisassembler32);
+            SetArm("<<<<10011xx1xxxxxxxxxxxxxxxxxxxx", "LDMIB", null, DisassembleBlockDataTransferDisassembler32);
+
 
             // Single Data Swap Format
             // TODO: implement

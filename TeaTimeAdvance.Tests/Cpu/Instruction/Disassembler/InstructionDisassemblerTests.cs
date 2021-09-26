@@ -73,8 +73,14 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         [TestCase(0xE1D000D0, ExpectedResult = "LDRSB", TestName = "LDRSB naming (immediate)")]
 
         // Data Transfer
-        [TestCase(0xE8800001, ExpectedResult = "STM", TestName = "STM naming")]
-        [TestCase(0xE8900001, ExpectedResult = "LDM", TestName = "LDM naming")]
+        [TestCase(0xE8800001, ExpectedResult = "STMIA", TestName = "STMIA naming")]
+        [TestCase(0xE9800001, ExpectedResult = "STMIB", TestName = "STMIB naming")]
+        [TestCase(0xE8000001, ExpectedResult = "STMDA", TestName = "STMDA naming")]
+        [TestCase(0xE9000001, ExpectedResult = "STMDB", TestName = "STMDB naming")]
+        [TestCase(0xE8900001, ExpectedResult = "LDMIA", TestName = "LDMIA naming")]
+        [TestCase(0xE9900001, ExpectedResult = "LDMIB", TestName = "LDMIB naming")]
+        [TestCase(0xE8100001, ExpectedResult = "LDMDA", TestName = "LDMDA naming")]
+        [TestCase(0xE9100001, ExpectedResult = "LDMDB", TestName = "LDMDB naming")]
 
         // Singla Data Swap
         [TestCase(0xE1000090, ExpectedResult = "SWP", TestName = "SWP naming")]
@@ -168,6 +174,11 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
         [TestCase(0xE0528DDFU, ExpectedResult = "LDRSB R8, [R2], #-0xDF", TestName = "LDRSB disassemly (register, post-indexing, negative, no writeback)")]
         [TestCase(0x01D0B0B0U, ExpectedResult = "LDRHEQ R11, [R0]", TestName = "LDRH disassemly (register, post-indexing, negative, no writeback)")]
         [TestCase(0xE1C431B4U, ExpectedResult = "STRH R3, [R4, #0x14]", TestName = "STRH disassemly (register, pre-indexing, no writeback)")]
+
+        // Data Transfer
+        [TestCase(0xE8800007, ExpectedResult = "STMIA R0, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, no writeback)")]
+        [TestCase(0xE8C00007, ExpectedResult = "STMIA R0, {R0, R1, R2}^", TestName = "STMIA disassemly (pre-indexing, no writeback, current bank)")]
+        [TestCase(0xE8A00007, ExpectedResult = "STMIA R0!, {R0, R1, R2}", TestName = "STMIA disassemly (pre-indexing, writeback, current bank)")]
         public string EnsureArmInstructionDisassemblyMatching(uint opcode)
         {
             InstructionInfo info = OpCodeTable.GetArmInstructionInfo(opcode);
