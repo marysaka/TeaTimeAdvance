@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleMultiplyLong32(InstructionInfo info, uint opcode)
         {
-            MulitplyLongFormat format = new MulitplyLongFormat
+            MulitplyLongFormat32 format = new MulitplyLongFormat32
             {
                 Opcode = opcode
             };

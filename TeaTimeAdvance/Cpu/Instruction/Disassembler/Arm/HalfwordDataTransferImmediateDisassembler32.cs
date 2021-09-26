@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleHalfwordDataTransferImmediate32(InstructionInfo info, uint opcode)
         {
-            HalfwordDataTransferImmediateFormat format = new HalfwordDataTransferImmediateFormat
+            HalfwordDataTransferImmediateFormat32 format = new HalfwordDataTransferImmediateFormat32
             {
                 Opcode = opcode
             };

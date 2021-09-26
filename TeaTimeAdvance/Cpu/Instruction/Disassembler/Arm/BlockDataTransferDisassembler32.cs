@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TeaTimeAdvance.Cpu.Instruction.Definition;
+using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 using TeaTimeAdvance.Cpu.State;
 
 namespace TeaTimeAdvance.Cpu.Instruction
@@ -8,7 +8,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleBlockDataTransferDisassembler32(InstructionInfo info, uint opcode)
         {
-            BlockDataTransferFormat format = new BlockDataTransferFormat
+            BlockDataTransferFormat32 format = new BlockDataTransferFormat32
             {
                 Opcode = opcode
             };

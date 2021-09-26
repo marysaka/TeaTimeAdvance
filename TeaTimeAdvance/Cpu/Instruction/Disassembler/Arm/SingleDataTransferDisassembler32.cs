@@ -1,11 +1,12 @@
 ﻿using System;
 using TeaTimeAdvance.Cpu.Instruction.Definition;
+using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static partial class InstructionDisassembler
     {
-        private static string FormatSingleDataTransferAddressExpression(SingleDataTransferFormat format)
+        private static string FormatSingleDataTransferAddressExpression(SingleDataTransferFormat32 format)
         {
             if (format.IsImmediate)
             {
@@ -42,7 +43,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassembleSingleDataTransfer32(InstructionInfo info, uint opcode)
         {
-            SingleDataTransferFormat format = new SingleDataTransferFormat
+            SingleDataTransferFormat32 format = new SingleDataTransferFormat32
             {
                 Opcode = opcode
             };

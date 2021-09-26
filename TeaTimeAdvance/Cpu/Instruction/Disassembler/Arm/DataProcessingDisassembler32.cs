@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using TeaTimeAdvance.Cpu.Instruction.Definition;
+using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -23,7 +24,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
             }
         }
 
-        private static string FormatDataProcesingOp2(DataProcessingFormat format)
+        private static string FormatDataProcesingOp2(DataProcessingFormat32 format)
         {
             if (format.IsImmediate)
             {
@@ -57,7 +58,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassembleDataProcesingOneOperand32(InstructionInfo info, uint opcode)
         {
-            DataProcessingFormat format = new DataProcessingFormat
+            DataProcessingFormat32 format = new DataProcessingFormat32
             {
                 Opcode = opcode
             };
@@ -76,7 +77,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassembleDataProcesingOneNoRdOperand32(InstructionInfo info, uint opcode)
         {
-            DataProcessingFormat format = new DataProcessingFormat
+            DataProcessingFormat32 format = new DataProcessingFormat32
             {
                 Opcode = opcode
             };
@@ -88,7 +89,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassembleDataProcesingArithmetic32(InstructionInfo info, uint opcode)
         {
-            DataProcessingFormat format = new DataProcessingFormat
+            DataProcessingFormat32 format = new DataProcessingFormat32
             {
                 Opcode = opcode
             };

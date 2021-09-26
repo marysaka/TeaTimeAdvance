@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleBranchExchange32(InstructionInfo info, uint opcode)
         {
-            BranchExchangeFormat format = new BranchExchangeFormat
+            BranchExchangeFormat32 format = new BranchExchangeFormat32
             {
                 Opcode = opcode
             };
@@ -16,7 +16,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassembleBranch32(InstructionInfo info, uint opcode)
         {
-            BranchFormat format = new BranchFormat
+            BranchFormat32 format = new BranchFormat32
             {
                 Opcode = opcode
             };

@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleSoftwareInterruptDisassembler32(InstructionInfo info, uint opcode)
         {
-            SoftwareInterruptFormat format = new SoftwareInterruptFormat
+            SoftwareInterruptFormat32 format = new SoftwareInterruptFormat32
             {
                 Opcode = opcode
             };

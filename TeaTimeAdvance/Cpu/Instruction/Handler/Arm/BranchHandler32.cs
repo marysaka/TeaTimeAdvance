@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 using TeaTimeAdvance.Cpu.State;
 
 using static TeaTimeAdvance.Cpu.Instruction.InstructionDecoderHelper;
@@ -9,7 +9,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static void Branch32(CpuContext context, uint opcode)
         {
-            BranchFormat format = new BranchFormat
+            BranchFormat32 format = new BranchFormat32
             {
                 Opcode = opcode
             };
@@ -23,7 +23,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static void BranchAndLink32(CpuContext context, uint opcode)
         {
-            BranchFormat format = new BranchFormat
+            BranchFormat32 format = new BranchFormat32
             {
                 Opcode = opcode
             };
@@ -39,7 +39,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static void BranchAndExchange32(CpuContext context, uint opcode)
         {
-            BranchExchangeFormat format = new BranchExchangeFormat
+            BranchExchangeFormat32 format = new BranchExchangeFormat32
             {
                 Opcode = opcode
             };

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using TeaTimeAdvance.Cpu.Instruction.Definition;
+using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -34,7 +35,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
             return $"{psr}_{fields}";
         }
 
-        private static string FormatPSRTransferOp2(PSRTransferFormat format)
+        private static string FormatPSRTransferOp2(PSRTransferFormat32 format)
         {
             if (format.IsImmediate)
             {
@@ -50,7 +51,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string DisassemblePSRTransferDisassembler32(InstructionInfo info, uint opcode)
         {
-            PSRTransferFormat format = new PSRTransferFormat
+            PSRTransferFormat32 format = new PSRTransferFormat32
             {
                 Opcode = opcode
             };

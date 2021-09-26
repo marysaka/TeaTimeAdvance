@@ -1,4 +1,4 @@
-﻿using TeaTimeAdvance.Cpu.Instruction.Definition;
+﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
 namespace TeaTimeAdvance.Cpu.Instruction
 {
@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleSingleDataSwapDisassembler32(InstructionInfo info, uint opcode)
         {
-            SingleDataSwapFormat format = new SingleDataSwapFormat
+            SingleDataSwapFormat32 format = new SingleDataSwapFormat32
             {
                 Opcode = opcode
             };

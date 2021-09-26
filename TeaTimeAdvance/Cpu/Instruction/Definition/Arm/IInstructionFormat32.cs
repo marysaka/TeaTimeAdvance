@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using TeaTimeAdvance.Cpu.State;
 
-namespace TeaTimeAdvance.Cpu.Instruction.Definition
+namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
 {
-    public interface IInstructionFormat
+    public interface IInstructionFormat32
     {
         uint Opcode { get; }
 
