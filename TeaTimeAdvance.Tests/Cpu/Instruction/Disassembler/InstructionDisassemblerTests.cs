@@ -171,6 +171,10 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0x1C51, "ADD", "ADD R1, R2, #0x1"),
             new DisassemblerTest(0x1A51, "SUB", "SUB R1, R2, R1"),
             new DisassemblerTest(0x1E51, "SUB", "SUB R1, R2, #0x1"),
+            new DisassemblerTest(0x2104, "MOV", "MOV R1, #0x4"),
+            new DisassemblerTest(0x2904, "CMP", "CMP R1, #0x4"),
+            new DisassemblerTest(0x3104, "ADD", "ADD R1, #0x4"),
+            new DisassemblerTest(0x3904, "SUB", "SUB R1, #0x4"),
         };
 
         [TestCaseSource(nameof(TestCases))]

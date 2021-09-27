@@ -124,10 +124,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Move / Compare / Add / Subtract Immediate Format
             // TODO: implement
-            SetThumb("00100xxxxxxxxxxx", "MOV");
-            SetThumb("00101xxxxxxxxxxx", "CMP");
-            SetThumb("00110xxxxxxxxxxx", "ADD");
-            SetThumb("00111xxxxxxxxxxx", "SUB");
+            SetThumb("00100xxxxxxxxxxx", "MOV", null, DisassembleMoveCompareAddSubtractImmediate16);
+            SetThumb("00101xxxxxxxxxxx", "CMP", null, DisassembleMoveCompareAddSubtractImmediate16);
+            SetThumb("00110xxxxxxxxxxx", "ADD", null, DisassembleMoveCompareAddSubtractImmediate16);
+            SetThumb("00111xxxxxxxxxxx", "SUB", null, DisassembleMoveCompareAddSubtractImmediate16);
 
 
             // ALU Operations Format
