@@ -109,12 +109,12 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0xE6000010U, "UND", "UND"),
 
             // Misc Arm disassembler tests
-            new DisassemblerTest(0xE1A0000FU, "MOV", "MOV R0, R15"),
-            new DisassemblerTest(0xE1B0000FU, "MOV", "MOVS R0, R15"),
+            new DisassemblerTest(0xE1A0000FU, "MOV", "MOV R0, PC"),
+            new DisassemblerTest(0xE1B0000FU, "MOV", "MOVS R0, PC"),
             new DisassemblerTest(0xE3E00301U, "MVN", "MVN R0, #0x4000000"),
             new DisassemblerTest(0xE3F00301U, "MVN", "MVNS R0, #0x4000000"),
-            new DisassemblerTest(0xE1E0000FU, "MVN", "MVN R0, R15"),
-            new DisassemblerTest(0xE1F0000FU, "MVN", "MVNS R0, R15"),
+            new DisassemblerTest(0xE1E0000FU, "MVN", "MVN R0, PC"),
+            new DisassemblerTest(0xE1F0000FU, "MVN", "MVNS R0, PC"),
             new DisassemblerTest(0xE3A00301U, "MOV", "MOV R0, #0x4000000"),
             new DisassemblerTest(0xE3B00301U, "MOV", "MOVS R0, #0x4000000"),
             new DisassemblerTest(0xE1A00010U, "MOV", "MOV R0, R0, LSL R0"),
@@ -162,10 +162,15 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0xE1442093U, "SWPB", "SWPB R2, R3, [R4]"),
             new DisassemblerTest(0x01010090U, "SWP", "SWPEQ R0, R0, [R1]"),
             new DisassemblerTest(0xEFDEADBEU, "SWI", "SWI #0xDEADBE"),
+
+            // Test all Thumb instructions.
+            new DisassemblerTest(0x0051, "LSL", "LSL R1, R2, #0x1"),
+            new DisassemblerTest(0x0851, "LSR", "LSR R1, R2, #0x1"),
+            new DisassemblerTest(0x1051, "ASR", "ASR R1, R2, #0x1"),
         };
 
         [TestCaseSource(nameof(TestCases))]
-        public (string, string) EnsureArmInstructionDisassemblyMatchingNew(uint opcode, bool isThumb)
+        public (string, string) EnsureArmInstructionDisassemblyMatching(uint opcode, bool isThumb)
         {
             InstructionInfo info = isThumb ? OpCodeTable.GetThumbInstructionInfo((ushort)opcode) : OpCodeTable.GetArmInstructionInfo(opcode);
 

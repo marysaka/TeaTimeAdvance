@@ -113,9 +113,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Move Shifted Register Format
             // TODO: implement
-            SetThumb("00000xxxxxxxxxxx", "LSL");
-            SetThumb("00001xxxxxxxxxxx", "LSR");
-            SetThumb("00010xxxxxxxxxxx", "ASR");
+            SetThumb("00000xxxxxxxxxxx", "LSL", null, DisassembleMoveShiftedRegister16);
+            SetThumb("00001xxxxxxxxxxx", "LSR", null, DisassembleMoveShiftedRegister16);
+            SetThumb("00010xxxxxxxxxxx", "ASR", null, DisassembleMoveShiftedRegister16);
 
             // Add / Subtract Format
             // TODO: implement

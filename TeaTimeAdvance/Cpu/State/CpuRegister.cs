@@ -121,7 +121,10 @@ namespace TeaTimeAdvance.Cpu.State
         FlagMask = 0xE0,
         RegisterMask = 0x1F,
 
+        // R0-R7 (low) or R8-R15 (high)
+        UserRegisterMask16 = 0x07,
+
         // R0-R15
-        UserRegisterMask = 0x0F
+        UserRegisterMask32 = 0x0F
     }
 }

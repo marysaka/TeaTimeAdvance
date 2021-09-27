@@ -21,7 +21,7 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
 
             Debug.Assert(index < (sizeof(uint) * BitsPerByte) / BitsPerCpuRegister);
 
-            return (CpuRegister)(Opcode >> (index * BitsPerCpuRegister)) & CpuRegister.UserRegisterMask;
+            return (CpuRegister)(Opcode >> (index * BitsPerCpuRegister)) & CpuRegister.UserRegisterMask32;
         }
     }
 }

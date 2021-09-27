@@ -16,7 +16,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static CpuRegister GetCpuRegisterFromOpcode(uint opcode, int shift)
         {
-            return (CpuRegister)(opcode >> shift) & CpuRegister.UserRegisterMask;
+            return (CpuRegister)(opcode >> shift) & CpuRegister.UserRegisterMask32;
         }
     }
 }

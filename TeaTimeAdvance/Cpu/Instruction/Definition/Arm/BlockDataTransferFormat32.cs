@@ -19,7 +19,7 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
 
         public bool HasCpuRegisterInRegisterList(CpuRegister register)
         {
-            register &= CpuRegister.UserRegisterMask;
+            register &= CpuRegister.UserRegisterMask32;
 
             return (Opcode & (1 << (int)register)) != 0;
         }

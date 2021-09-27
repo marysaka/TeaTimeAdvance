@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Cpu\Instruction\Definition\Thumb\" />
-    <Folder Include="Cpu\Instruction\Disassembler\Thumb\" />
     <Folder Include="Cpu\Instruction\Handler\Thumb\" />
   </ItemGroup>
 </Project>
