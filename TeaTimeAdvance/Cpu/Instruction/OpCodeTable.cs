@@ -132,22 +132,22 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // ALU Operations Format
             // TODO: implement
-            SetThumb("0100000000xxxxxx", "AND");
-            SetThumb("0100000001xxxxxx", "EOR");
-            SetThumb("0100000010xxxxxx", "LSL");
-            SetThumb("0100000011xxxxxx", "LSR");
-            SetThumb("0100000100xxxxxx", "ASR");
-            SetThumb("0100000101xxxxxx", "ADC");
-            SetThumb("0100000110xxxxxx", "SBC");
-            SetThumb("0100000111xxxxxx", "ROR");
-            SetThumb("0100001000xxxxxx", "TST");
-            SetThumb("0100001001xxxxxx", "NEG");
-            SetThumb("0100001010xxxxxx", "CMP");
-            SetThumb("0100001011xxxxxx", "CMN");
-            SetThumb("0100001100xxxxxx", "ORR");
-            SetThumb("0100001101xxxxxx", "MUL");
-            SetThumb("0100001110xxxxxx", "BIC");
-            SetThumb("0100001111xxxxxx", "MVN");
+            SetThumb("0100000000xxxxxx", "AND", null, DisassembleALUOperations16);
+            SetThumb("0100000001xxxxxx", "EOR", null, DisassembleALUOperations16);
+            SetThumb("0100000010xxxxxx", "LSL", null, DisassembleALUOperations16);
+            SetThumb("0100000011xxxxxx", "LSR", null, DisassembleALUOperations16);
+            SetThumb("0100000100xxxxxx", "ASR", null, DisassembleALUOperations16);
+            SetThumb("0100000101xxxxxx", "ADC", null, DisassembleALUOperations16);
+            SetThumb("0100000110xxxxxx", "SBC", null, DisassembleALUOperations16);
+            SetThumb("0100000111xxxxxx", "ROR", null, DisassembleALUOperations16);
+            SetThumb("0100001000xxxxxx", "TST", null, DisassembleALUOperations16);
+            SetThumb("0100001001xxxxxx", "NEG", null, DisassembleALUOperations16);
+            SetThumb("0100001010xxxxxx", "CMP", null, DisassembleALUOperations16);
+            SetThumb("0100001011xxxxxx", "CMN", null, DisassembleALUOperations16);
+            SetThumb("0100001100xxxxxx", "ORR", null, DisassembleALUOperations16);
+            SetThumb("0100001101xxxxxx", "MUL", null, DisassembleALUOperations16);
+            SetThumb("0100001110xxxxxx", "BIC", null, DisassembleALUOperations16);
+            SetThumb("0100001111xxxxxx", "MVN", null, DisassembleALUOperations16);
 
             // Hi Register Operations / Branch Exchange Format
             // TODO: implement

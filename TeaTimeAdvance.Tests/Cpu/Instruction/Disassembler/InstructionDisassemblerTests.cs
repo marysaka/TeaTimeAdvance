@@ -175,6 +175,22 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0x2904, "CMP", "CMP R1, #0x4"),
             new DisassemblerTest(0x3104, "ADD", "ADD R1, #0x4"),
             new DisassemblerTest(0x3904, "SUB", "SUB R1, #0x4"),
+            new DisassemblerTest(0x4004, "AND", "AND R4, R0"),
+            new DisassemblerTest(0x4044, "EOR", "EOR R4, R0"),
+            new DisassemblerTest(0x4084, "LSL", "LSL R4, R0"),
+            new DisassemblerTest(0x40C4, "LSR", "LSR R4, R0"),
+            new DisassemblerTest(0x4104, "ASR", "ASR R4, R0"),
+            new DisassemblerTest(0x4144, "ADC", "ADC R4, R0"),
+            new DisassemblerTest(0x4184, "SBC", "SBC R4, R0"),
+            new DisassemblerTest(0x41C4, "ROR", "ROR R4, R0"),
+            new DisassemblerTest(0x4204, "TST", "TST R4, R0"),
+            new DisassemblerTest(0x4244, "NEG", "NEG R4, R0"),
+            new DisassemblerTest(0x4284, "CMP", "CMP R4, R0"),
+            new DisassemblerTest(0x42C4, "CMN", "CMN R4, R0"),
+            new DisassemblerTest(0x4304, "ORR", "ORR R4, R0"),
+            new DisassemblerTest(0x4344, "MUL", "MUL R4, R0"),
+            new DisassemblerTest(0x4384, "BIC", "BIC R4, R0"),
+            new DisassemblerTest(0x43C4, "MVN", "MVN R4, R0"),
         };
 
         [TestCaseSource(nameof(TestCases))]
