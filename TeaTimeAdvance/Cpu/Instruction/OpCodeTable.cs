@@ -119,8 +119,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Add / Subtract Format
             // TODO: implement
-            SetThumb("00011x0xxxxxxxxx", "ADD");
-            SetThumb("00011x1xxxxxxxxx", "ADD");
+            SetThumb("00011x0xxxxxxxxx", "ADD", null, DisassembleAddSubtract16);
+            SetThumb("00011x1xxxxxxxxx", "SUB", null, DisassembleAddSubtract16);
 
             // Move / Compare / Add / Subtract Immediate Format
             // TODO: implement

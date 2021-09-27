@@ -167,6 +167,10 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0x0051, "LSL", "LSL R1, R2, #0x1"),
             new DisassemblerTest(0x0851, "LSR", "LSR R1, R2, #0x1"),
             new DisassemblerTest(0x1051, "ASR", "ASR R1, R2, #0x1"),
+            new DisassemblerTest(0x1851, "ADD", "ADD R1, R2, R1"),
+            new DisassemblerTest(0x1C51, "ADD", "ADD R1, R2, #0x1"),
+            new DisassemblerTest(0x1A51, "SUB", "SUB R1, R2, R1"),
+            new DisassemblerTest(0x1E51, "SUB", "SUB R1, R2, #0x1"),
         };
 
         [TestCaseSource(nameof(TestCases))]
