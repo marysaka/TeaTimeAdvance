@@ -162,10 +162,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load / Store With Register Offset Format
             // TODO: implement
-            SetThumb("0101000xxxxxxxxx", "STR");
-            SetThumb("0101010xxxxxxxxx", "STRB");
-            SetThumb("0101100xxxxxxxxx", "LDR");
-            SetThumb("0101110xxxxxxxxx", "LDRB");
+            SetThumb("0101000xxxxxxxxx", "STR", null, DisassembleLoadStoreWithRegisterOffset16);
+            SetThumb("0101010xxxxxxxxx", "STRB", null, DisassembleLoadStoreWithRegisterOffset16);
+            SetThumb("0101100xxxxxxxxx", "LDR", null, DisassembleLoadStoreWithRegisterOffset16);
+            SetThumb("0101110xxxxxxxxx", "LDRB", null, DisassembleLoadStoreWithRegisterOffset16);
 
             // Load / Store sign-extended Byte / Halfword Format
             // TODO: implement

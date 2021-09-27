@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using TeaTimeAdvance.Cpu.State;
 
 namespace TeaTimeAdvance.Cpu.Instruction.Definition.Thumb
