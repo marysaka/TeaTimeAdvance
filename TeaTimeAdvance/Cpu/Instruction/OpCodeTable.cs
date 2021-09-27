@@ -158,7 +158,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // PC-relative Load Format
             // TODO: implement
-            SetThumb("01001xxxxxxxxxxx", "LDR");
+            SetThumb("01001xxxxxxxxxxx", "LDR", null, DisassemblePCRelativeLoad16);
 
             // Load / Store With Register Offset Format
             // TODO: implement
