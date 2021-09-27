@@ -151,10 +151,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Hi Register Operations / Branch Exchange Format
             // TODO: implement
-            SetThumb("01000100xxxxxxxx", "ADD");
-            SetThumb("01000101xxxxxxxx", "CMP");
-            SetThumb("01000110xxxxxxxx", "MOV");
-            SetThumb("01000111xxxxxxxx", "BX");
+            SetThumb("01000100xxxxxxxx", "ADD", null, DisassembleHiRegisterOperations16);
+            SetThumb("01000101xxxxxxxx", "CMP", null, DisassembleHiRegisterOperations16);
+            SetThumb("01000110xxxxxxxx", "MOV", null, DisassembleHiRegisterOperations16);
+            SetThumb("01000111xxxxxxxx", "BX", null, DisassembleBranchExchange16);
 
             // PC-relative Load Format
             // TODO: implement

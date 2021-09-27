@@ -191,6 +191,11 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0x4344, "MUL", "MUL R4, R0"),
             new DisassemblerTest(0x4384, "BIC", "BIC R4, R0"),
             new DisassemblerTest(0x43C4, "MVN", "MVN R4, R0"),
+            new DisassemblerTest(0x440C, "ADD", "ADD R4, R1"),
+            new DisassemblerTest(0x44CC, "ADD", "ADD R11, R8"),
+            new DisassemblerTest(0x450C, "CMP", "CMP R4, R1"),
+            new DisassemblerTest(0x460C, "MOV", "MOV R4, R1"),
+            new DisassemblerTest(0x470C, "BX", "BX R1"),
         };
 
         [TestCaseSource(nameof(TestCases))]
