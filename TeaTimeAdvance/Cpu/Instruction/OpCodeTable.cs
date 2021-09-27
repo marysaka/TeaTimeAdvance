@@ -169,10 +169,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load / Store sign-extended Byte / Halfword Format
             // TODO: implement
-            SetThumb("0101001xxxxxxxxx", "STRH");
-            SetThumb("0101011xxxxxxxxx", "LDSB");
-            SetThumb("0101101xxxxxxxxx", "LDRH");
-            SetThumb("0101111xxxxxxxxx", "LDSH");
+            SetThumb("0101001xxxxxxxxx", "STRH", null, DisassembleLoadStoreHalfword16);
+            SetThumb("0101011xxxxxxxxx", "LDSB", null, DisassembleLoadStoreHalfword16);
+            SetThumb("0101101xxxxxxxxx", "LDRH", null, DisassembleLoadStoreHalfword16);
+            SetThumb("0101111xxxxxxxxx", "LDSH", null, DisassembleLoadStoreHalfword16);
 
             // Load / Store With Immediate Offset Format
             // TODO: implement
