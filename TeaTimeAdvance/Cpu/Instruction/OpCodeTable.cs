@@ -176,10 +176,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load / Store With Immediate Offset Format
             // TODO: implement
-            SetThumb("01100xxxxxxxxxxx", "STR");
-            SetThumb("01101xxxxxxxxxxx", "LDR");
-            SetThumb("01110xxxxxxxxxxx", "STRB");
-            SetThumb("01111xxxxxxxxxxx", "LDRB");
+            SetThumb("01100xxxxxxxxxxx", "STR", null, DisassembleLoadStoreWithImmediateOffset16);
+            SetThumb("01101xxxxxxxxxxx", "LDR", null, DisassembleLoadStoreWithImmediateOffset16);
+            SetThumb("01110xxxxxxxxxxx", "STRB", null, DisassembleLoadStoreWithImmediateOffset16);
+            SetThumb("01111xxxxxxxxxxx", "LDRB", null, DisassembleLoadStoreWithImmediateOffset16);
 
             // Load / Store Halfword Format
             // TODO: implement
