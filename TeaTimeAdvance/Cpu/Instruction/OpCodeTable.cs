@@ -188,8 +188,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // SP-relative Load / Store Format
             // TODO: implement
-            SetThumb("10010xxxxxxxxxxx", "STR");
-            SetThumb("10011xxxxxxxxxxx", "LDR");
+            SetThumb("10010xxxxxxxxxxx", "STR", null, DisassembleSPRelativeLoadStore16);
+            SetThumb("10011xxxxxxxxxxx", "LDR", null, DisassembleSPRelativeLoadStore16);
 
             // Load Address Format
             // TODO: implement

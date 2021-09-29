@@ -4,7 +4,7 @@ using TeaTimeAdvance.Cpu.State;
 namespace TeaTimeAdvance.Cpu.Instruction.Definition.Thumb
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 2)]
-    public struct PCRelativeLoadFormat16 : IInstructionFormat16
+    public struct SPRelativeLoadStoreFormat16 : IInstructionFormat16
     {
         public ushort Opcode;
 
