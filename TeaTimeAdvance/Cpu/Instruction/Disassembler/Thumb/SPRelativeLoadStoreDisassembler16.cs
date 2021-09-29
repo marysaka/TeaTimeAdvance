@@ -6,7 +6,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static string DisassembleSPRelativeLoadStore16(InstructionInfo info, uint opcode)
         {
-            PCRelativeLoadFormat16 format = new PCRelativeLoadFormat16
+            SPRelativeLoadStoreFormat16 format = new SPRelativeLoadStoreFormat16
             {
                 Opcode = (ushort)opcode
             };

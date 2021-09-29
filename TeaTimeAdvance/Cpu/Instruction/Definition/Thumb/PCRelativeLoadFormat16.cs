@@ -11,6 +11,6 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Thumb
         ushort IInstructionFormat16.Opcode => Opcode;
 
         public CpuRegister Rd => ((IInstructionFormat16)this).GetRegisterByOffset(8);
-        public short Immediate => (short)((Opcode & 0x1F) << 2);
+        public short Immediate => (short)((Opcode & 0xFF) << 2);
     }
 }

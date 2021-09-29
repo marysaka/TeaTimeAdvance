@@ -193,16 +193,16 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load Address Format
             // TODO: implement
-            SetThumb("1010xxxxxxxxxxxx", "ADD");
+            SetThumb("1010xxxxxxxxxxxx", "ADD", null, DisassembleLoadAddress16);
 
             // Add Offset To Stack Pointer Format
             // TODO: implement
-            SetThumb("1011xxxxxxxxxxxx", "ADD");
+            SetThumb("10110000xxxxxxxx", "ADD", null, DisassembleAddOffsetToStackPointer16);
 
             // Push / Pop Registers Format
             // TODO: implement
-            SetThumb("1011010xxxxxxxxx", "PUSH");
-            SetThumb("1011110xxxxxxxxx", "POP");
+            SetThumb("1011010xxxxxxxxx", "PUSH", null, DisassemblePushPopRegisters16);
+            SetThumb("1011110xxxxxxxxx", "POP", null, DisassemblePushPopRegisters16);
 
             // Multiple Load / Store Format
             // TODO: implement
