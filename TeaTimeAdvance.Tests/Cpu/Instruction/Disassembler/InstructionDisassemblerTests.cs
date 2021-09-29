@@ -222,6 +222,8 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0xB501, "PUSH", "PUSH {R0, R14}"),
             new DisassemblerTest(0xBC01, "POP", "POP {R0}"),
             new DisassemblerTest(0xBD01, "POP", "POP {R0, PC}"),
+            new DisassemblerTest(0xC102, "STMIA", "STMIA R1!, {R1}"),
+            new DisassemblerTest(0xC902, "LDMIA", "LDMIA R1!, {R1}"),
         };
 
         [TestCaseSource(nameof(TestCases))]

@@ -206,8 +206,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Multiple Load / Store Format
             // TODO: implement
-            SetThumb("11000xxxxxxxxxxx", "LDMIA");
-            SetThumb("11001xxxxxxxxxxx", "STMIA");
+            SetThumb("11000xxxxxxxxxxx", "STMIA", null, DisassembleMultipleLoadStore16);
+            SetThumb("11001xxxxxxxxxxx", "LDMIA", null, DisassembleMultipleLoadStore16);
 
             // Conditional Branch Format
             // TODO: implement
