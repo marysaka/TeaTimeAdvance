@@ -4,7 +4,7 @@ using TeaTimeAdvance.Cpu.State;
 namespace TeaTimeAdvance.Cpu.Instruction.Definition.Thumb
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 2)]
-    public struct LoadStoreHalfwordFormat16 : IInstructionFormat16
+    public struct LoadStoreHalfwordOffsetFormat16 : IInstructionFormat16
     {
         public ushort Opcode;
 
@@ -12,8 +12,7 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Thumb
 
         public CpuRegister Rd => ((IInstructionFormat16)this).GetRegisterByIndex(0);
         public CpuRegister Rb => ((IInstructionFormat16)this).GetRegisterByIndex(1);
-        public CpuRegister Ro => ((IInstructionFormat16)this).GetRegisterByIndex(2);
+        public byte Offset => (byte)((Opcode >> 6) & 0x1F);
         public bool IsStore => (Opcode & (1 << 11)) == 0;
-        public bool IsSignedExtended => (Opcode & (1 << 10)) != 0;
     }
 }

@@ -169,10 +169,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load / Store sign-extended Byte / Halfword Format
             // TODO: implement
-            SetThumb("0101001xxxxxxxxx", "STRH", null, DisassembleLoadStoreHalfword16);
-            SetThumb("0101011xxxxxxxxx", "LDSB", null, DisassembleLoadStoreHalfword16);
-            SetThumb("0101101xxxxxxxxx", "LDRH", null, DisassembleLoadStoreHalfword16);
-            SetThumb("0101111xxxxxxxxx", "LDSH", null, DisassembleLoadStoreHalfword16);
+            SetThumb("0101001xxxxxxxxx", "STRH", null, DisassembleLoadStoreHalfwordRegister16);
+            SetThumb("0101011xxxxxxxxx", "LDSB", null, DisassembleLoadStoreHalfwordRegister16);
+            SetThumb("0101101xxxxxxxxx", "LDRH", null, DisassembleLoadStoreHalfwordRegister16);
+            SetThumb("0101111xxxxxxxxx", "LDSH", null, DisassembleLoadStoreHalfwordRegister16);
 
             // Load / Store With Immediate Offset Format
             // TODO: implement
@@ -183,8 +183,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Load / Store Halfword Format
             // TODO: implement
-            SetThumb("10000xxxxxxxxxxx", "STRH");
-            SetThumb("10001xxxxxxxxxxx", "LDRH");
+            SetThumb("10000xxxxxxxxxxx", "STRH", null, DisassembleLoadStoreHalfwordOffset16);
+            SetThumb("10001xxxxxxxxxxx", "LDRH", null, DisassembleLoadStoreHalfwordOffset16);
 
             // SP-relative Load / Store Format
             // TODO: implement

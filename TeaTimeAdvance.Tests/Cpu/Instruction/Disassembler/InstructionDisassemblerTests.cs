@@ -210,6 +210,8 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0x6849, "LDR", "LDR R1, [R1, #0x1]"),
             new DisassemblerTest(0x7049, "STRB", "STRB R1, [R1, #0x1]"),
             new DisassemblerTest(0x7849, "LDRB", "LDRB R1, [R1, #0x1]"),
+            new DisassemblerTest(0x8049, "STRH", "STRH R1, [R1, #0x1]"),
+            new DisassemblerTest(0x8849, "LDRH", "LDRH R1, [R1, #0x1]")
         };
 
         [TestCaseSource(nameof(TestCases))]

@@ -4,9 +4,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static partial class InstructionDisassembler
     {
-        public static string DisassembleLoadStoreHalfword16(InstructionInfo info, uint opcode)
+        public static string DisassembleLoadStoreHalfwordRegister16(InstructionInfo info, uint opcode)
         {
-            LoadStoreHalfwordFormat16 format = new LoadStoreHalfwordFormat16
+            LoadStoreHalfwordRegisterFormat16 format = new LoadStoreHalfwordRegisterFormat16
             {
                 Opcode = (ushort)opcode
             };
