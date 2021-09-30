@@ -226,7 +226,8 @@ namespace TeaTimeAdvance.Tests.Cpu.Instruction.Disassembler
             new DisassemblerTest(0xC902, "LDMIA", "LDMIA R1!, {R1}"),
             new DisassemblerTest(0xD001, "B", "BEQ #0x6"),
             new DisassemblerTest(0xD0FE, "B", "BEQ #0x0"),
-            new DisassemblerTest(0xD0FC, "B", "BEQ #-0x4")
+            new DisassemblerTest(0xD0FC, "B", "BEQ #-0x4"),
+            new DisassemblerTest(0xDF01, "SWI", "SWI #0x1")
         };
 
         [TestCaseSource(nameof(TestCases))]

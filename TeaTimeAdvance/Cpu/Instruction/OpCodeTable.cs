@@ -215,7 +215,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Software Interrupt Format
             // TODO: implement
-            SetThumb("11011111xxxxxxxx", "SMI");
+            SetThumb("11011111xxxxxxxx", "SWI", null, DisassembleSoftwareInterruptDisassembler16);
 
             // Unconditional Branch Format
             // TODO: implement
