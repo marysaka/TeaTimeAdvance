@@ -9,7 +9,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
         {
             if (value < 0)
             {
-                return $"#-0x{value:X}";
+                return $"#-0x{-value:X}";
             }
             else
             {
@@ -31,8 +31,11 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         public static string GetConditionCodeName(uint opcode)
         {
-            CpuConditionCode conditionCode = GetConditionCodeFromOpcode(opcode);
+            return GetConditionCodeName(GetConditionCodeFromOpcode(opcode));
+        }
 
+        public static string GetConditionCodeName(CpuConditionCode conditionCode)
+        {
             if (conditionCode == CpuConditionCode.AL)
             {
                 return string.Empty;

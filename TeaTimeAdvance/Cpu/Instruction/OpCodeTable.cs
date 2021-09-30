@@ -211,7 +211,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Conditional Branch Format
             // TODO: implement
-            SetThumb("1101xxxxxxxxxxxx", "B");
+            SetThumb("1101xxxxxxxxxxxx", "B", null, DisassembleConditionalBranch16);
 
             // Software Interrupt Format
             // TODO: implement

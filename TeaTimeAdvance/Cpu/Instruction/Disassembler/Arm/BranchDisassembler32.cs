@@ -1,5 +1,7 @@
 ﻿using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
 
+using static TeaTimeAdvance.Cpu.Instruction.InstructionDecoderHelper;
+
 namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static partial class InstructionDisassembler
@@ -21,7 +23,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 Opcode = opcode
             };
 
-            return $"{info.Name}{GetConditionCodeName(opcode)} {FormatSignedImmediate(format.Offset)}";
+            return $"{info.Name}{GetConditionCodeName(opcode)} {FormatSignedImmediate((int)(format.Offset + ArmInstructionSize * 2))}";
         }
     }
 }

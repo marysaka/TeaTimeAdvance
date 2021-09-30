@@ -9,6 +9,6 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
 
         uint IInstructionFormat32.Opcode => Opcode;
 
-        public int Offset => (int)(((ulong)Opcode << 40) >> 38);
+        public int Offset => InstructionDecoderHelper.SignExtendImmediate24(Opcode) << 2;
     }
 }
