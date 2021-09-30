@@ -219,7 +219,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             // Unconditional Branch Format
             // TODO: implement
-            SetThumb("11100xxxxxxxxxxx", "B");
+            SetThumb("11100xxxxxxxxxxx", "B", null, DisassembleUnconditionalBranch16);
 
             // Long Branch With Link Format
             // TODO: implement

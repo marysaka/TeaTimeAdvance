@@ -46,5 +46,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
         {
             return SignExtendImmediate(immediate, 8);
         }
+
+        public static int SignExtendImmediate11(uint immediate)
+        {
+            return SignExtendImmediate(immediate, 11);
+        }
     }
 }
