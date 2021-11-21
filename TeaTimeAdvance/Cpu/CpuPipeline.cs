@@ -68,13 +68,13 @@ namespace TeaTimeAdvance.Cpu
 
             if (context.State.StatusRegister.HasFlag(CurrentProgramStatusRegister.Thumb))
             {
-                pc &= ~ThumbInstructionSize;
+                pc &= ~(ThumbInstructionSize - 1);
 
                 fetchedValue = context.BusContext.Read16(pc, _busAccessType);
             }
             else
             {
-                pc &= ~ArmInstructionSize;
+                pc &= ~(ArmInstructionSize - 1);
 
                 fetchedValue = context.BusContext.Read32(pc, _busAccessType);
             }
@@ -144,7 +144,7 @@ namespace TeaTimeAdvance.Cpu
             if (!isThumb && !ShouldExecute(context, opcode))
             {
                 _busAccessType = BusAccessType.Sequential;
-                context.State.Register(CpuRegister.PC) += ArmInstructionSize;
+                context.UpdateProgramCounter32();
             }
             else
             {

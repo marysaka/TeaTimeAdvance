@@ -26,7 +26,7 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
         public CpuRegister Rs => (CpuRegister)(Shift >> 4);
 
         // Register shift immediate form
-        public byte ShiftImmediate => (byte)(Shift >> 3);
+        public byte ShiftImmediate => (byte)((Shift >> 3) & 0x1F);
 
         // Immediate form
         public byte Imm => (byte)Opcode;

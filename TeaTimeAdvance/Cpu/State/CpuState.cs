@@ -198,6 +198,19 @@ namespace TeaTimeAdvance.Cpu.State
             throw new NotImplementedException(realRegister.ToString());
         }
 
+        // FIXME: make a less dumb variant as this is highly inefficiant to set flags.
+        public void SetStatusFlag(CurrentProgramStatusRegister field, bool value)
+        {
+            if (!value && StatusRegister.HasFlag(field))
+            {
+                CPSR &= ~(uint)field;
+            }
+            else if (value)
+            {
+                CPSR |= (uint)field;
+            }
+        }
+
         public void SetCpuMode(CpuMode mode)
         {
             if (mode == CpuMode.Invalid)

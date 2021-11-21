@@ -28,7 +28,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<00x10101xxxxxxxxxxxxxxxxxxxx", "CMP", null, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x10111xxxxxxxxxxxxxxxxxxxx", "CMN", null, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x1100xxxxxxxxxxxxxxxxxxxxx", "ORR", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x1101xxxxxxxxxxxxxxxxxxxxx", "MOV", null, DisassembleDataProcesingOneOperand32);
+            SetArm("<<<<00x1101xxxxxxxxxxxxxxxxxxxxx", "MOV", Move32, DisassembleDataProcesingOneOperand32);
             SetArm("<<<<00x1110xxxxxxxxxxxxxxxxxxxxx", "BIC", null, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x1111xxxxxxxxxxxxxxxxxxxxx", "MVN", null, DisassembleDataProcesingOneOperand32);
 

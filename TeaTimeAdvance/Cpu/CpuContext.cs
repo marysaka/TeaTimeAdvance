@@ -1,4 +1,5 @@
 using TeaTimeAdvance.Bus;
+using TeaTimeAdvance.Cpu.Instruction;
 using TeaTimeAdvance.Cpu.State;
 using TeaTimeAdvance.Scheduler;
 
@@ -36,6 +37,21 @@ namespace TeaTimeAdvance.Cpu
         public uint GetRegister(CpuRegister register)
         {
             return State.Register(register);
+        }
+
+        public void UpdateProgramCounter32()
+        {
+            State.Register(CpuRegister.PC) += InstructionDecoderHelper.ArmInstructionSize;
+        }
+
+        public void UpdateProgramCounter16()
+        {
+            State.Register(CpuRegister.PC) += InstructionDecoderHelper.ThumbInstructionSize;
+        }
+
+        public void SetStatusFlag(CurrentProgramStatusRegister field, bool value)
+        {
+            State.SetStatusFlag(field, value);
         }
 
         public void SetCpuMode(CpuMode mode)
