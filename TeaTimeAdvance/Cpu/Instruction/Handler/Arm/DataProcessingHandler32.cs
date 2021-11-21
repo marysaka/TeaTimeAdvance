@@ -93,6 +93,54 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 shifterOperand = rmValue << rnValue;
                 shifterCarry = (shifterOperand & (1 << (32 - rnValue))) != 0;
             }
+            else if (rnValue == 32)
+            {
+                shifterOperand = 0;
+                shifterCarry = (shifterOperand & 1) != 0;
+            }
+            else
+            {
+                shifterOperand = 0;
+                shifterCarry = false;
+            }
+        }
+
+        private static void HandleDataProcesingOperandLsrByImmediate(CpuContext context, DataProcessingFormat32 format, out uint shifterOperand, out bool shifterCarry)
+        {
+            uint rmValue = GetRegisterValueForDataProcesingOperand(context, format.Rm);
+
+            shifterOperand = rmValue >> format.ShiftImmediate;
+
+            if (format.ShiftImmediate == 0)
+            {
+                shifterCarry = (shifterOperand & (1 << 31)) != 0;
+            }
+            else
+            {
+                shifterCarry = (shifterOperand & (1 << (format.ShiftImmediate - 1))) != 0;
+            }
+        }
+
+        private static void HandleDataProcesingOperandLsrByRegister(CpuContext context, DataProcessingFormat32 format, out uint shifterOperand, out bool shifterCarry)
+        {
+            uint rmValue = GetRegisterValueForDataProcesingOperand(context, format.Rm);
+            byte rnValue = (byte)GetRegisterValueForDataProcesingOperand(context, format.Rn);
+
+            if (rnValue == 0)
+            {
+                shifterOperand = rmValue;
+                shifterCarry = context.State.StatusRegister.HasFlag(CurrentProgramStatusRegister.Carry);
+            }
+            else if (rnValue < 32)
+            {
+                shifterOperand = rmValue << rnValue;
+                shifterCarry = (shifterOperand & (1 << (format.ShiftImmediate - 1))) != 0;
+            }
+            else if (rnValue == 32)
+            {
+                shifterOperand = 0;
+                shifterCarry = (shifterOperand & (1 << 31)) != 0;
+            }
             else
             {
                 shifterOperand = 0;
@@ -123,6 +171,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
                             case CpuShift.LogicalLeft:
                                 HandleDataProcesingOperandLslByImmediate(context, format, out shifterOperand, out shifterCarry);
                                 break;
+                            case CpuShift.LogicalRight:
+                                HandleDataProcesingOperandLsrByImmediate(context, format, out shifterOperand, out shifterCarry);
+                                break;
                             default:
                                 throw new NotImplementedException(format.ShiftType.ToString());
                         }
@@ -135,6 +186,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
                     {
                         case CpuShift.LogicalLeft:
                             HandleDataProcesingOperandLslByRegister(context, format, out shifterOperand, out shifterCarry);
+                            break;
+                        case CpuShift.LogicalRight:
+                            HandleDataProcesingOperandLsrByRegister(context, format, out shifterOperand, out shifterCarry);
                             break;
                         default:
                             throw new NotImplementedException(format.ShiftType.ToString());
