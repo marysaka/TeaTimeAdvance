@@ -1,6 +1,7 @@
 using System;
 using System.Buffers.Binary;
 using TeaTimeAdvance.Bus;
+using TeaTimeAdvance.Common;
 
 namespace TeaTimeAdvance.Device
 {
@@ -8,7 +9,6 @@ namespace TeaTimeAdvance.Device
     {
         protected byte[] _data;
 
-        // 16 KiB
         public virtual uint MappedSize => (uint)_data.Length;
 
         public MemoryBackedDevice(int size)
@@ -27,39 +27,39 @@ namespace TeaTimeAdvance.Device
             data.CopyTo(_data);
         }
 
-        protected Span<byte> GetSpan(uint address, int size)
+        protected Span<byte> GetSpan(uint baseAddress, uint address, int size)
         {
-            return _data.AsSpan().Slice((int)(address & MappedSize), size);
+            return _data.AsSpan().Slice((int)((address - baseAddress) % MappedSize), size);
         }
 
-        public virtual byte Read8(uint address)
+        public virtual byte Read8(uint baseAddress, uint address)
         {
-            return GetSpan(address, sizeof(byte))[0];
+            return GetSpan(baseAddress, address, sizeof(byte))[0];
         }
 
-        public virtual ushort Read16(uint address)
+        public virtual ushort Read16(uint baseAddress, uint address)
         {
-            return BinaryPrimitives.ReadUInt16LittleEndian(GetSpan(address, sizeof(ushort)));
+            return BinaryPrimitives.ReadUInt16LittleEndian(GetSpan(baseAddress, address, sizeof(ushort)));
         }
 
-        public virtual uint Read32(uint address)
+        public virtual uint Read32(uint baseAddress, uint address)
         {
-            return BinaryPrimitives.ReadUInt32LittleEndian(GetSpan(address, sizeof(uint)));
+            return BinaryPrimitives.ReadUInt32LittleEndian(GetSpan(baseAddress, address, sizeof(uint)));
         }
 
-        public virtual void Write8(uint address, byte value)
+        public virtual void Write8(uint baseAddress, uint address, byte value)
         {
-            GetSpan(address, sizeof(byte))[0] = value;
+            GetSpan(baseAddress, address, sizeof(byte))[0] = value;
         }
 
-        public virtual void Write16(uint address, ushort value)
+        public virtual void Write16(uint baseAddress, uint address, ushort value)
         {
-            BinaryPrimitives.WriteUInt16LittleEndian(GetSpan(address, sizeof(ushort)), value);
+            BinaryPrimitives.WriteUInt16LittleEndian(GetSpan(baseAddress, address, sizeof(ushort)), value);
         }
 
-        public virtual void Write32(uint address, uint value)
+        public virtual void Write32(uint baseAddress, uint address, uint value)
         {
-            BinaryPrimitives.WriteUInt32LittleEndian(GetSpan(address, sizeof(uint)), value);
+            BinaryPrimitives.WriteUInt32LittleEndian(GetSpan(baseAddress, address, sizeof(uint)), value);
         }
     }
 }

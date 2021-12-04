@@ -39,6 +39,7 @@ namespace TeaTimeAdvance
                 _cpuContext.SetRegister(CpuRegister.SP_irq, 0x03007FA0);
                 _cpuContext.SetRegister(CpuRegister.SP_sys, 0x03007F00);
                 _cpuContext.SetRegister(CpuRegister.PC, 0x08000000);
+                _cpuContext.Pipeline.ReloadForArm(_cpuContext);
             }
         }
 

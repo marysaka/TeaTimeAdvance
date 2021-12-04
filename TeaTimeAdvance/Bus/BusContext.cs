@@ -58,10 +58,10 @@ namespace TeaTimeAdvance.Bus
             }
         }
 
-        private IBusDevice GetAssociatedDeviceAtAddress(uint address)
+        private IBusDevice GetAssociatedDeviceAtAddress(uint address, out uint baseAddress)
         {
             uint pageIndex = address >> PageGranuality;
-            uint baseAddress = pageIndex << PageGranuality;
+            baseAddress = pageIndex << PageGranuality;
 
             IBusDevice device = _pagesDeviceMapping[pageIndex];
 
@@ -120,7 +120,7 @@ namespace TeaTimeAdvance.Bus
 
         public byte Read8(uint address, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -129,12 +129,12 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead8(address);
             }
 
-            return device.Read8(address);
+            return device.Read8(baseAddress, address);
         }
 
         public ushort Read16(uint address, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -143,12 +143,12 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead16(address);
             }
 
-            return device.Read16(address);
+            return device.Read16(baseAddress, address);
         }
 
         public uint Read32(uint address, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -157,12 +157,12 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead32(address);
             }
 
-            return device.Read32(address);
+            return device.Read32(baseAddress, address);
         }
 
         public void Write8(uint address, byte value, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -173,12 +173,12 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
-            device.Write8(address, value);
+            device.Write8(baseAddress, address, value);
         }
 
         public void Write16(uint address, ushort value, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -189,12 +189,12 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
-            device.Write16(address, value);
+            device.Write16(baseAddress, address, value);
         }
 
         public void Write32(uint address, uint value, BusAccessType accessType)
         {
-            IBusDevice device = GetAssociatedDeviceAtAddress(address);
+            IBusDevice device = GetAssociatedDeviceAtAddress(address, out uint baseAddress);
 
             // TODO: clock cycles infos.
 
@@ -205,7 +205,7 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
-            device.Write32(address, value);
+            device.Write32(baseAddress, address, value);
         }
     }
 }

@@ -39,8 +39,8 @@ namespace TeaTimeAdvance.Cpu
         {
             ref uint pc = ref context.State.Register(CpuRegister.PC);
 
-            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read32(pc + 0x00, BusAccessType.NonSequential);
-            _pipelineCache[(int)PipelineIndex.DecodeStage] = context.BusContext.Read32(pc + 0x04, BusAccessType.Sequential);
+            _pipelineCache[(int)PipelineIndex.ExecuteStage] = context.BusContext.Read32(pc, BusAccessType.NonSequential);
+            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read32(pc + ArmInstructionSize, BusAccessType.Sequential);
             _busAccessType = BusAccessType.Sequential;
 
             pc += ArmInstructionSize * 2;
@@ -50,8 +50,8 @@ namespace TeaTimeAdvance.Cpu
         {
             ref uint pc = ref context.State.Register(CpuRegister.PC);
 
-            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read16(pc + 0x00, BusAccessType.NonSequential);
-            _pipelineCache[(int)PipelineIndex.DecodeStage] = context.BusContext.Read16(pc + 0x02, BusAccessType.Sequential);
+            _pipelineCache[(int)PipelineIndex.ExecuteStage] = context.BusContext.Read16(pc, BusAccessType.NonSequential);
+            _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read16(pc + ThumbInstructionSize, BusAccessType.Sequential);
             _busAccessType = BusAccessType.Sequential;
 
             pc += ThumbInstructionSize * 2;
@@ -59,7 +59,6 @@ namespace TeaTimeAdvance.Cpu
 
         private void Fetch(CpuContext context)
         {
-            // Advance the previous fetch stage value to the decode stage
             _pipelineCache[(int)PipelineIndex.DecodeStage] = _pipelineCache[(int)PipelineIndex.FetchStage];
 
             ref uint pc = ref context.State.Register(CpuRegister.PC);
@@ -86,8 +85,6 @@ namespace TeaTimeAdvance.Cpu
         {
             // Advance the previous decode stage value to the execution stage
             _pipelineCache[(int)PipelineIndex.ExecuteStage] = _pipelineCache[(int)PipelineIndex.DecodeStage];
-
-            // FIXME: Do anything else here?
         }
 
         private static bool ShouldExecute(CpuContext context, uint opcode)
@@ -129,15 +126,15 @@ namespace TeaTimeAdvance.Cpu
                         cpsr.HasFlag(CurrentProgramStatusRegister.Negative) == cpsr.HasFlag(CurrentProgramStatusRegister.Overflow);
                 case CpuConditionCode.AL:
                     return true;
+                case CpuConditionCode.NV:
+                    return false;
                 default:
                     throw new NotImplementedException(cc.ToString());
             }
         }
 
-        private void Execute(CpuContext context)
+        private void Execute(CpuContext context, uint opcode)
         {
-            uint opcode = _pipelineCache[(int)PipelineIndex.ExecuteStage];
-
             bool isThumb = context.State.StatusRegister.HasFlag(CurrentProgramStatusRegister.Thumb);
 
             // First make sure that we don't have to skip this instruction
@@ -176,10 +173,14 @@ namespace TeaTimeAdvance.Cpu
 
         public void Update(CpuContext context)
         {
+            // First we grab the execution stage opcode to avoid possible pipeline shenanigan (understand reload)
+            uint opcode = _pipelineCache[(int)PipelineIndex.ExecuteStage];
+
             // 3 stage pipeline
+
             Fetch(context);
             Decode(context);
-            Execute(context);
+            Execute(context, opcode);
         }
     }
 }

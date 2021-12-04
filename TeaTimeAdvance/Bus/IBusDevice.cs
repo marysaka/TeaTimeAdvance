@@ -4,16 +4,16 @@ namespace TeaTimeAdvance.Bus
     {
         uint MappedSize { get; }
 
-        byte Read8(uint address);
+        byte Read8(uint baseAddress, uint address);
 
-        ushort Read16(uint address);
+        ushort Read16(uint baseAddress, uint address);
 
-        uint Read32(uint address);
+        uint Read32(uint baseAddress, uint address);
 
-        void Write8(uint address, byte value);
+        void Write8(uint baseAddress, uint address, byte value);
 
-        void Write16(uint address, ushort value);
+        void Write16(uint baseAddress, uint address, ushort value);
 
-        void Write32(uint address, uint value);
+        void Write32(uint baseAddress, uint address, uint value);
     }
 }

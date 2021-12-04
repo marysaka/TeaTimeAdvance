@@ -17,7 +17,8 @@
         GT,
         LE,
         AL,
-        Invalid,
+        // Invalid or NEVER
+        NV,
 
         Mask = 0xF
     }
