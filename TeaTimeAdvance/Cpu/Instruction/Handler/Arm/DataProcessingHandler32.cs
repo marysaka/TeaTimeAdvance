@@ -13,21 +13,21 @@ namespace TeaTimeAdvance.Cpu.Instruction
     {
         public static void LogicalAnd32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                return (rn & shifterOperand, shifterCarry);
+                return rn & shifterOperand;
             });
         }
 
         public static void LogicalExclusiveOr32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                return (rn ^ shifterOperand, shifterCarry);
+                return rn ^ shifterOperand;
             });
         }
 
@@ -37,9 +37,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Subtraction(out carry, rn, shifterOperand);
+                uint result = ArithmeticHelper.Subtraction(out carry, out bool overflowFlag, rn, shifterOperand);
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
@@ -49,9 +49,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Subtraction(out carry, shifterOperand, rn);
+                uint result = ArithmeticHelper.Subtraction(out carry, out bool overflowFlag, shifterOperand, rn);
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
@@ -61,9 +61,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Addition(out carry, rn, shifterOperand);
+                uint result = ArithmeticHelper.Addition(out carry, out bool overflowFlag, rn, shifterOperand);
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
@@ -73,9 +73,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Addition(out carry, rn, shifterOperand, Convert.ToUInt32(carry));
+                uint result = ArithmeticHelper.Addition(out carry, out bool overflowFlag, rn, shifterOperand, Convert.ToUInt32(carry));
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
@@ -85,9 +85,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Subtraction(out carry, rn, shifterOperand, Convert.ToUInt32(carry));
+                uint result = ArithmeticHelper.Subtraction(out carry, out bool overflowFlag, rn, shifterOperand, Convert.ToUInt32(carry));
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
@@ -97,43 +97,71 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                uint result = ArithmeticHelper.Subtraction(out carry, shifterOperand, rn, Convert.ToUInt32(carry));
+                uint result = ArithmeticHelper.Subtraction(out carry, out bool overflowFlag, shifterOperand, rn, Convert.ToUInt32(carry));
 
-                return (result, carry);
+                return (result, carry, overflowFlag);
             });
         }
 
         public static void LogicalOr32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                return (rn | shifterOperand, shifterCarry);
+                return rn | shifterOperand;
             });
         }
 
         public static void Move32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) => (shifterOperand, shifterCarry));
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) => shifterOperand);
         }
 
         public static void BitClear32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) =>
             {
                 ref uint rn = ref context.State.Register(format.Rn);
 
-                return (rn & ~shifterOperand, shifterCarry);
+                return rn & ~shifterOperand;
             });
         }
 
         public static void MoveNot32(CpuContext context, uint opcode)
         {
-            HandleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) => (~shifterOperand, shifterCarry));
+            HandleSimpleDataProcessingFormat32(context, opcode, (format, shifterOperand, shifterCarry) => ~shifterOperand);
         }
 
-        private static void HandleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, (uint, bool)> processing)
+        private static void HandleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, (uint, bool, bool)> processing)
+        {
+            DataProcessingFormat32 format = new DataProcessingFormat32
+            {
+                Opcode = opcode
+            };
+
+            ref uint rd = ref context.State.Register(format.Rd);
+
+            HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carryFlag);
+
+            (rd, carryFlag, bool overflowFlag) = processing(format, shifterOperand, carryFlag);
+
+            if (format.SetCondition && format.Rd == CpuRegister.PC)
+            {
+                context.SetRegister(CpuRegister.CPSR, context.GetRegister(CpuRegister.SPSR));
+            }
+            else if (format.SetCondition)
+            {
+                HandleDataProcesingNZFlagsUpdate(context, rd);
+
+                context.SetStatusFlag(CurrentProgramStatusRegister.Carry, carryFlag);
+                context.SetStatusFlag(CurrentProgramStatusRegister.Overflow, overflowFlag);
+            }
+
+            context.UpdateProgramCounter32();
+        }
+
+        private static void HandleSimpleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, uint> processing)
         {
             DataProcessingFormat32 format = new DataProcessingFormat32
             {
@@ -144,7 +172,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carry);
 
-            (rd, carry) = processing(format, shifterOperand, carry);
+            rd = processing(format, shifterOperand, carry);
 
             if (format.SetCondition && format.Rd == CpuRegister.PC)
             {
