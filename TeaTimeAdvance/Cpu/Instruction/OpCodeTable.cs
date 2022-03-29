@@ -107,8 +107,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<011xxxxxxxxxxxxxxxxxxxx1xxxx", "UND");
 
             // Branch Format
-            SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B",  Branch32,            DisassembleBranch32);
-            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32,     DisassembleBranch32);
+            SetArm("<<<<1010xxxxxxxxxxxxxxxxxxxxxxxx", "B", Branch32, DisassembleBranch32);
+            SetArm("<<<<1011xxxxxxxxxxxxxxxxxxxxxxxx", "BL", BranchAndLink32, DisassembleBranch32);
 
 
             // Move Shifted Register Format

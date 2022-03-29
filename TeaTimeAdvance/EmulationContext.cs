@@ -56,7 +56,7 @@ namespace TeaTimeAdvance
 
         public void Execute(ulong cycles)
         {
-            ulong targetCycle = _schedulerContext.CurrentCycle + cycles; 
+            ulong targetCycle = _schedulerContext.CurrentCycle + cycles;
 
             while (_schedulerContext.CurrentCycle <= targetCycle)
             {
