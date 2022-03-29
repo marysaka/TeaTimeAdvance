@@ -15,22 +15,22 @@ namespace TeaTimeAdvance.Cpu.Instruction
         {
             // Data Processing Format
             // TODO: implement
-            SetArm("<<<<00x0000xxxxxxxxxxxxxxxxxxxxx", "AND", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0001xxxxxxxxxxxxxxxxxxxxx", "EOR", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0010xxxxxxxxxxxxxxxxxxxxx", "SUB", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0011xxxxxxxxxxxxxxxxxxxxx", "RSB", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0100xxxxxxxxxxxxxxxxxxxxx", "ADD", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0101xxxxxxxxxxxxxxxxxxxxx", "ADC", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0110xxxxxxxxxxxxxxxxxxxxx", "SBC", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x0111xxxxxxxxxxxxxxxxxxxxx", "RSC", null, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0000xxxxxxxxxxxxxxxxxxxxx", "AND", LogicalAnd32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0001xxxxxxxxxxxxxxxxxxxxx", "EOR", LogicalExclusiveOr32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0010xxxxxxxxxxxxxxxxxxxxx", "SUB", Subtract32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0011xxxxxxxxxxxxxxxxxxxxx", "RSB", ReverseSubtract32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0100xxxxxxxxxxxxxxxxxxxxx", "ADD", Add32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0101xxxxxxxxxxxxxxxxxxxxx", "ADC", AddCarry32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0110xxxxxxxxxxxxxxxxxxxxx", "SBC", SubtractCarry32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x0111xxxxxxxxxxxxxxxxxxxxx", "RSC", ReverseSubtractCarry32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x10001xxxxxxxxxxxxxxxxxxxx", "TST", null, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x10011xxxxxxxxxxxxxxxxxxxx", "TEQ", null, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x10101xxxxxxxxxxxxxxxxxxxx", "CMP", null, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x10111xxxxxxxxxxxxxxxxxxxx", "CMN", null, DisassembleDataProcesingOneNoRdOperand32);
-            SetArm("<<<<00x1100xxxxxxxxxxxxxxxxxxxxx", "ORR", null, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x1100xxxxxxxxxxxxxxxxxxxxx", "ORR", LogicalOr32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x1101xxxxxxxxxxxxxxxxxxxxx", "MOV", Move32, DisassembleDataProcesingOneOperand32);
-            SetArm("<<<<00x1110xxxxxxxxxxxxxxxxxxxxx", "BIC", null, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x1111xxxxxxxxxxxxxxxxxxxxx", "MVN", null, DisassembleDataProcesingOneOperand32);
+            SetArm("<<<<00x1110xxxxxxxxxxxxxxxxxxxxx", "BIC", BitClear32, DisassembleDataProcesingArithmetic32);
+            SetArm("<<<<00x1111xxxxxxxxxxxxxxxxxxxxx", "MVN", MoveNot32, DisassembleDataProcesingOneOperand32);
 
             // PSR Transfer Format
             // TODO: implement
