@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common;
 using TeaTimeAdvance.Cpu.Instruction.Definition;
 using TeaTimeAdvance.Cpu.Instruction.Definition.Arm;
@@ -179,6 +180,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         private static void HandleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, (uint, bool, bool)> processing, bool shouldOutput = true)
         {
+            context.BusAccessType = BusAccessType.Sequential;
+
             DataProcessingFormat32 format = new DataProcessingFormat32
             {
                 Opcode = opcode
@@ -210,6 +213,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
         private static void HandleSimpleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, uint> processing, bool shouldOutput = true)
         {
+            context.BusAccessType = BusAccessType.Sequential;
+
             DataProcessingFormat32 format = new DataProcessingFormat32
             {
                 Opcode = opcode

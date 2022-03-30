@@ -12,6 +12,8 @@ namespace TeaTimeAdvance.Cpu
         public SchedulerContext Scheduler { get; }
         public BusContext BusContext { get; }
 
+        public BusAccessType BusAccessType { get => Pipeline.BusAccessType; set => Pipeline.BusAccessType = value; }
+
         public CpuContext(SchedulerContext scheduler, BusContext busContext)
         {
             Scheduler = scheduler;

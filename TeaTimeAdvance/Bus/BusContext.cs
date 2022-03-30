@@ -65,7 +65,7 @@ namespace TeaTimeAdvance.Bus
 
             IBusDevice device = _pagesDeviceMapping[pageIndex];
 
-            if (address >= baseAddress + device.MappedSize)
+            if (device == null || address >= baseAddress + device.MappedSize)
             {
                 return null;
             }
@@ -99,21 +99,21 @@ namespace TeaTimeAdvance.Bus
 
         public void UnmappedWrite8(uint address, byte value)
         {
-            Console.Error.WriteLine($"Invalid 8 bits write at 0x{address:X8} (value = 0x{value:X2}");
+            Console.Error.WriteLine($"Invalid 8 bits write at 0x{address:X8} (value = 0x{value:X2})");
 
             // TODO
         }
 
         public void UnmappedWrite16(uint address, ushort value)
         {
-            Console.Error.WriteLine($"Invalid 16 bits write at 0x{address:X8} (value = 0x{value:X4}");
+            Console.Error.WriteLine($"Invalid 16 bits write at 0x{address:X8} (value = 0x{value:X4})");
 
             // TODO
         }
 
         public void UnmappedWrite32(uint address, uint value)
         {
-            Console.Error.WriteLine($"Invalid 32 bits write at 0x{address:X8} (value = 0x{value:X8}");
+            Console.Error.WriteLine($"Invalid 32 bits write at 0x{address:X8} (value = 0x{value:X8})");
 
             // TODO
         }

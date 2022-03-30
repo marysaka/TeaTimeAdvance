@@ -22,7 +22,8 @@ namespace TeaTimeAdvance.Cpu
         private const uint UndefinedStateInstruction = 0x00F020E3;
 
         private Array3<uint> _pipelineCache;
-        private BusAccessType _busAccessType;
+
+        public BusAccessType BusAccessType { get; set; }
 
         public CpuPipeline()
         {
@@ -32,7 +33,7 @@ namespace TeaTimeAdvance.Cpu
         public void Reset()
         {
             _pipelineCache.ToSpan().Fill(UndefinedStateInstruction);
-            _busAccessType = BusAccessType.NonSequential;
+            BusAccessType = BusAccessType.NonSequential;
         }
 
         public void ReloadForArm(CpuContext context)
@@ -41,7 +42,7 @@ namespace TeaTimeAdvance.Cpu
 
             _pipelineCache[(int)PipelineIndex.ExecuteStage] = context.BusContext.Read32(pc, BusAccessType.NonSequential);
             _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read32(pc + ArmInstructionSize, BusAccessType.Sequential);
-            _busAccessType = BusAccessType.Sequential;
+            BusAccessType = BusAccessType.Sequential;
 
             pc += ArmInstructionSize * 2;
         }
@@ -52,7 +53,7 @@ namespace TeaTimeAdvance.Cpu
 
             _pipelineCache[(int)PipelineIndex.ExecuteStage] = context.BusContext.Read16(pc, BusAccessType.NonSequential);
             _pipelineCache[(int)PipelineIndex.FetchStage] = context.BusContext.Read16(pc + ThumbInstructionSize, BusAccessType.Sequential);
-            _busAccessType = BusAccessType.Sequential;
+            BusAccessType = BusAccessType.Sequential;
 
             pc += ThumbInstructionSize * 2;
         }
@@ -69,13 +70,13 @@ namespace TeaTimeAdvance.Cpu
             {
                 pc &= ~(ThumbInstructionSize - 1);
 
-                fetchedValue = context.BusContext.Read16(pc, _busAccessType);
+                fetchedValue = context.BusContext.Read16(pc, BusAccessType);
             }
             else
             {
                 pc &= ~(ArmInstructionSize - 1);
 
-                fetchedValue = context.BusContext.Read32(pc, _busAccessType);
+                fetchedValue = context.BusContext.Read32(pc, BusAccessType);
             }
 
             _pipelineCache[(int)PipelineIndex.FetchStage] = fetchedValue;
@@ -140,7 +141,7 @@ namespace TeaTimeAdvance.Cpu
             // First make sure that we don't have to skip this instruction
             if (!isThumb && !ShouldExecute(context, opcode))
             {
-                _busAccessType = BusAccessType.Sequential;
+                BusAccessType = BusAccessType.Sequential;
                 context.UpdateProgramCounter32();
             }
             else

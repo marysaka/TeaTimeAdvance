@@ -14,7 +14,6 @@ namespace TeaTimeAdvance.Cpu.Instruction
         static OpCodeTable()
         {
             // Data Processing Format
-            // TODO: implement
             SetArm("<<<<00x0000xxxxxxxxxxxxxxxxxxxxx", "AND", LogicalAnd32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x0001xxxxxxxxxxxxxxxxxxxxx", "EOR", LogicalExclusiveOr32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x0010xxxxxxxxxxxxxxxxxxxxx", "SUB", Subtract32, DisassembleDataProcesingArithmetic32);
@@ -45,9 +44,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<000xx0x1xxxxxxxx00001x01xxxx", "LDRSB", null, DisassembleHalfwordDataTransferRegister32);
 
             // Halfword Data Transfer: immediate offset Format
+            SetArm("<<<<000xx1x1xxxxxxxxxxxx1xx1xxxx", "LDRH", LoadHalfwordUnsignedDataImmediate32, DisassembleHalfwordDataTransferImmediate32);
+            SetArm("<<<<000xx1x0xxxxxxxxxxxx1xx1xxxx", "STRH", StoreHalfwordUnsignedDataImmediate32, DisassembleHalfwordDataTransferImmediate32);
             // TODO: implement
-            SetArm("<<<<000xx1x1xxxxxxxxxxxx1xx1xxxx", "LDRH", null, DisassembleHalfwordDataTransferImmediate32);
-            SetArm("<<<<000xx1x0xxxxxxxxxxxx1xx1xxxx", "STRH", null, DisassembleHalfwordDataTransferImmediate32);
             SetArm("<<<<000xx1x1xxxxxxxxxxxx1x01xxxx", "LDRSB", null, DisassembleHalfwordDataTransferImmediate32);
 
             // Multiply Long Format
