@@ -23,10 +23,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<00x0101xxxxxxxxxxxxxxxxxxxxx", "ADC", AddCarry32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x0110xxxxxxxxxxxxxxxxxxxxx", "SBC", SubtractCarry32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x0111xxxxxxxxxxxxxxxxxxxxx", "RSC", ReverseSubtractCarry32, DisassembleDataProcesingArithmetic32);
-            SetArm("<<<<00x10001xxxxxxxxxxxxxxxxxxxx", "TST", null, DisassembleDataProcesingOneNoRdOperand32);
-            SetArm("<<<<00x10011xxxxxxxxxxxxxxxxxxxx", "TEQ", null, DisassembleDataProcesingOneNoRdOperand32);
-            SetArm("<<<<00x10101xxxxxxxxxxxxxxxxxxxx", "CMP", null, DisassembleDataProcesingOneNoRdOperand32);
-            SetArm("<<<<00x10111xxxxxxxxxxxxxxxxxxxx", "CMN", null, DisassembleDataProcesingOneNoRdOperand32);
+            SetArm("<<<<00x10001xxxxxxxxxxxxxxxxxxxx", "TST", Test32, DisassembleDataProcesingOneNoRdOperand32);
+            SetArm("<<<<00x10011xxxxxxxxxxxxxxxxxxxx", "TEQ", TestEquivalence32, DisassembleDataProcesingOneNoRdOperand32);
+            SetArm("<<<<00x10101xxxxxxxxxxxxxxxxxxxx", "CMP", TestCompare32, DisassembleDataProcesingOneNoRdOperand32);
+            SetArm("<<<<00x10111xxxxxxxxxxxxxxxxxxxx", "CMN", TestCompareNegated32, DisassembleDataProcesingOneNoRdOperand32);
             SetArm("<<<<00x1100xxxxxxxxxxxxxxxxxxxxx", "ORR", LogicalOr32, DisassembleDataProcesingArithmetic32);
             SetArm("<<<<00x1101xxxxxxxxxxxxxxxxxxxxx", "MOV", Move32, DisassembleDataProcesingOneOperand32);
             SetArm("<<<<00x1110xxxxxxxxxxxxxxxxxxxxx", "BIC", BitClear32, DisassembleDataProcesingArithmetic32);

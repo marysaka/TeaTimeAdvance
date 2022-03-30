@@ -12,7 +12,7 @@ namespace TeaTimeAdvance.Common
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool OverflowFrom(long value) => value < int.MinValue || value > int.MaxValue;
-        
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Addition(out bool outCarry, out bool overflowFlag, uint a, uint b, uint c = 0)
