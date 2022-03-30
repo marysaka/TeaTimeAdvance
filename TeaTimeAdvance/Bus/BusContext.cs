@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using TeaTimeAdvance.Common;
 using TeaTimeAdvance.Device;
+using TeaTimeAdvance.Device.IO;
 using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Bus
@@ -19,10 +20,18 @@ namespace TeaTimeAdvance.Bus
         private SchedulerContext _schedulerContext;
         private IBusDevice[] _pagesDeviceMapping;
 
+        public StructBackedDevice<IORegisters> Registers { get; }
+
         public BusContext(SchedulerContext schedulerContext)
         {
             _schedulerContext = schedulerContext;
             _pagesDeviceMapping = new IBusDevice[LastPage + 1];
+            Registers = new StructBackedDevice<IORegisters>();
+
+            Registers.RegisterWriteCallback(nameof(IORegisters.DISPCNT), (ref IORegisters data) =>
+            {
+                Console.WriteLine("TOUCHED DISPSTAT");
+            });
         }
 
         public void Initialize(ReadOnlySpan<byte> bios, ReadOnlySpan<byte> rom)
@@ -37,7 +46,7 @@ namespace TeaTimeAdvance.Bus
             RegisterDevice(0x03000000, new MemoryBackedDevice(0x8000));
 
             // IO registers [0x04000000 - 0x040003FE]
-            // TODO
+            RegisterDevice(0x04000000, Registers);
 
             // TODO: PPU memory mapping
 
