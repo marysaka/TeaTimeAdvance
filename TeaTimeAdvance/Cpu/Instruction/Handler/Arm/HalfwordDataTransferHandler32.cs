@@ -79,6 +79,11 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             context.Idle();
             context.SetRegister(format.Rd, readValue);
+
+            if (format.Rd == CpuRegister.PC)
+            {
+                context.ReloadPipeline();
+            }
         }
 
         public static void StoreHalfwordUnsignedDataImmediate32(CpuContext context, uint opcode)
