@@ -7,6 +7,7 @@ namespace TeaTimeAdvance.Device
         //public override uint MappedSize => 0x6000000;
 
         // TODO: Handles weird out of range behaviours.
+        // TODO: Handle prefetch correctly and wait
         public RomDevice(ReadOnlySpan<byte> data) : base(data) { }
 
         public override void Write8(uint baseAddress, uint address, byte value)

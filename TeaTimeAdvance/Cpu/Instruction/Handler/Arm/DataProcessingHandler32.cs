@@ -187,7 +187,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 Opcode = opcode
             };
 
-            HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carryFlag);
+            HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carryFlag, out bool skipProgramCounterIncrement);
 
             (uint temp, carryFlag, bool overflowFlag) = processing(format, shifterOperand, carryFlag);
 
@@ -196,11 +196,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 context.SetRegister(format.Rd, temp);
             }
 
-            if (shouldOutput && format.SetCondition && format.Rd == CpuRegister.PC)
-            {
-                context.SetRegister(CpuRegister.CPSR, context.GetRegister(CpuRegister.SPSR));
-            }
-            else if (!shouldOutput || format.SetCondition)
+            if (!shouldOutput || format.SetCondition)
             {
                 HandleDataProcesingNZFlagsUpdate(context, temp);
 
@@ -208,7 +204,23 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 context.SetStatusFlag(CurrentProgramStatusRegister.Overflow, overflowFlag);
             }
 
-            context.UpdateProgramCounter32();
+            if (format.Rd == CpuRegister.PC)
+            {
+                if (shouldOutput && format.SetCondition)
+                {
+                    context.SetRegister(CpuRegister.CPSR, context.GetRegister(CpuRegister.SPSR));
+                }
+                else if (!shouldOutput)
+                {
+                    context.ReloadPipeline();
+                    skipProgramCounterIncrement = true;
+                }
+            }
+
+            if (!skipProgramCounterIncrement)
+            {
+                context.UpdateProgramCounter32();
+            }
         }
 
         private static void HandleSimpleDataProcessingFormat32(CpuContext context, uint opcode, Func<DataProcessingFormat32, uint, bool, uint> processing, bool shouldOutput = true)
@@ -220,7 +232,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 Opcode = opcode
             };
 
-            HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carry);
+            HandleDataProcesingOperands(context, format, out uint shifterOperand, out bool carry, out bool skipProgramCounterIncrement);
 
             uint temp = processing(format, shifterOperand, carry);
 
@@ -229,18 +241,30 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 context.SetRegister(format.Rd, temp);
             }
 
-            if (shouldOutput && format.SetCondition && format.Rd == CpuRegister.PC)
-            {
-                context.SetRegister(CpuRegister.CPSR, context.GetRegister(CpuRegister.SPSR));
-            }
-            else if (!shouldOutput || format.SetCondition)
+            if (!shouldOutput || format.SetCondition)
             {
                 HandleDataProcesingNZFlagsUpdate(context, temp);
 
                 context.SetStatusFlag(CurrentProgramStatusRegister.Carry, carry);
             }
 
-            context.UpdateProgramCounter32();
+            if (format.Rd == CpuRegister.PC)
+            {
+                if (shouldOutput && format.SetCondition)
+                {
+                    context.SetRegister(CpuRegister.CPSR, context.GetRegister(CpuRegister.SPSR));
+                }
+                else if (!shouldOutput)
+                {
+                    context.ReloadPipeline();
+                    skipProgramCounterIncrement = true;
+                }
+            }
+
+            if (!skipProgramCounterIncrement)
+            {
+                context.UpdateProgramCounter32();
+            }
         }
 
         private static uint GetRegisterValueForDataProcesingOperand(CpuContext context, CpuRegister register)
@@ -354,8 +378,10 @@ namespace TeaTimeAdvance.Cpu.Instruction
             }
         }
 
-        private static void HandleDataProcesingOperands(CpuContext context, DataProcessingFormat32 format, out uint shifterOperand, out bool shifterCarry)
+        private static void HandleDataProcesingOperands(CpuContext context, DataProcessingFormat32 format, out uint shifterOperand, out bool shifterCarry, out bool skipProgramCounterIncrement)
         {
+            skipProgramCounterIncrement = false;
+
             if (format.IsImmediate)
             {
                 HandleDataProcesingOperandImmediate(context, format, out shifterOperand, out shifterCarry);
@@ -364,6 +390,11 @@ namespace TeaTimeAdvance.Cpu.Instruction
             {
                 if (format.IsShiftImmediate)
                 {
+                    skipProgramCounterIncrement = true;
+                    context.UpdateProgramCounter32();
+                    context.Idle();
+                    context.BusAccessType = BusAccessType.NonSequential;
+
                     // Special register format (formated as LSL #0x0)
                     if (format.ShiftType == CpuShift.LogicalLeft && format.ShiftImmediate == 0)
                     {

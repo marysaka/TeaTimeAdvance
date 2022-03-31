@@ -60,6 +60,7 @@ namespace TeaTimeAdvance
 
             while (_schedulerContext.CurrentCycle <= targetCycle)
             {
+                // TODO: Handle CPU sleep state.
                 _cpuContext.Update();
             }
         }

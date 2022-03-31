@@ -77,8 +77,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
 
             HandlePostHalfwordDataTransfer32(context, format.Rn, format.IsPreIndexing, format.WriteBack, addressWithOffset);
 
-            // TODO: Wait one cycle
-
+            context.Idle();
             context.SetRegister(format.Rd, readValue);
         }
 

@@ -28,11 +28,9 @@ namespace TeaTimeAdvance.Bus
             _pagesDeviceMapping = new IBusDevice[LastPage + 1];
             Registers = new StructBackedDevice<IORegisters>();
 
-            Registers.RegisterWriteCallback(nameof(IORegisters.DISPCNT), (ref IORegisters data) =>
+            Registers.RegisterWriteCallback(nameof(IORegisters.DISPCNT), (ref IORegisters data, BusAccessInfo info) =>
             {
-                string line = data.DISPCNT.ToString();
-
-                Console.WriteLine(line);
+                Console.WriteLine(data.DISPCNT.ToString());
             });
         }
 
@@ -42,7 +40,11 @@ namespace TeaTimeAdvance.Bus
             RegisterDevice(0x00000000, new BiosDevice(bios));
 
             // WRAM 1 (256 KiB) [0x02000000 - 0x0203FFFF]
-            RegisterDevice(0x02000000, new MemoryBackedDevice(0x40000));
+            RegisterDevice(0x02000000, new MemoryBackedDevice(0x40000, new byte[]
+            {
+                3, 3, 6,
+                3, 3, 6,
+            }));
 
             // WRAM 2 (32 KiB) [0x03000000 - 0x03007FFF]
             RegisterDevice(0x03000000, new MemoryBackedDevice(0x8000));
@@ -88,6 +90,8 @@ namespace TeaTimeAdvance.Bus
         {
             Console.Error.WriteLine($"Invalid 8 bits read at 0x{address:X8}");
 
+            UpdateCycles(1);
+
             // TODO
             return 0;
         }
@@ -95,6 +99,8 @@ namespace TeaTimeAdvance.Bus
         private ushort UnmappedRead16(uint address)
         {
             Console.Error.WriteLine($"Invalid 16 bits read at 0x{address:X8}");
+
+            UpdateCycles(1);
 
             // TODO
             return 0;
@@ -104,6 +110,8 @@ namespace TeaTimeAdvance.Bus
         {
             Console.Error.WriteLine($"Invalid 32 bits read at 0x{address:X8}");
 
+            UpdateCycles(1);
+
             // TODO
             return 0;
         }
@@ -112,6 +120,8 @@ namespace TeaTimeAdvance.Bus
         {
             Console.Error.WriteLine($"Invalid 8 bits write at 0x{address:X8} (value = 0x{value:X2})");
 
+            UpdateCycles(1);
+
             // TODO
         }
 
@@ -119,12 +129,16 @@ namespace TeaTimeAdvance.Bus
         {
             Console.Error.WriteLine($"Invalid 16 bits write at 0x{address:X8} (value = 0x{value:X4})");
 
+            UpdateCycles(1);
+
             // TODO
         }
 
         public void UnmappedWrite32(uint address, uint value)
         {
             Console.Error.WriteLine($"Invalid 32 bits write at 0x{address:X8} (value = 0x{value:X8})");
+
+            UpdateCycles(1);
 
             // TODO
         }
@@ -140,6 +154,7 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead8(address);
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Read | BusAccessInfo.Memory8);
             return device.Read8(baseAddress, address);
         }
 
@@ -154,6 +169,7 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead16(address);
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Read | BusAccessInfo.Memory16);
             return device.Read16(baseAddress, address);
         }
 
@@ -168,6 +184,7 @@ namespace TeaTimeAdvance.Bus
                 return UnmappedRead32(address);
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Read | BusAccessInfo.Memory32);
             return device.Read32(baseAddress, address);
         }
 
@@ -184,6 +201,7 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Write | BusAccessInfo.Memory8);
             device.Write8(baseAddress, address, value);
         }
 
@@ -200,6 +218,7 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Write | BusAccessInfo.Memory16);
             device.Write16(baseAddress, address, value);
         }
 
@@ -216,7 +235,13 @@ namespace TeaTimeAdvance.Bus
                 return;
             }
 
+            device.UpdateScheduler(this, address, accessType, BusAccessInfo.Write | BusAccessInfo.Memory32);
             device.Write32(baseAddress, address, value);
+        }
+
+        public void UpdateCycles(ulong cycles)
+        {
+            _schedulerContext.UpdateCycles(cycles);
         }
     }
 }

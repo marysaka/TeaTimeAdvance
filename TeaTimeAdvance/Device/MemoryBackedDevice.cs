@@ -1,28 +1,59 @@
 using System;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common;
+using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Device
 {
     public class MemoryBackedDevice : IBusDevice
     {
+        private const int MaxBusAccessType = 2;
+        private const int MaxBusAccessInfoMemoryType = 3;
+
         protected byte[] _data;
 
         public virtual uint MappedSize => (uint)_data.Length;
 
-        public MemoryBackedDevice(int size)
+        private readonly byte[] _waitTimes;
+
+        public MemoryBackedDevice(int size, byte[] waitTimes = null)
         {
             _data = new byte[size];
+
+            if (waitTimes == null)
+            {
+                _waitTimes = new byte[MaxBusAccessType * MaxBusAccessInfoMemoryType];
+                _waitTimes.AsSpan().Fill(1);
+            }
+            else
+            {
+                Debug.Assert(waitTimes.Length == MaxBusAccessType * MaxBusAccessInfoMemoryType);
+
+                _waitTimes = waitTimes;
+            }
         }
 
-        public MemoryBackedDevice(ReadOnlySpan<byte> data)
+        public MemoryBackedDevice(ReadOnlySpan<byte> data, byte[] waitTimes = null)
         {
             // Enforce a full copy here.
             _data = data.ToArray();
+
+            if (waitTimes == null)
+            {
+                _waitTimes = new byte[MaxBusAccessType * MaxBusAccessInfoMemoryType];
+                _waitTimes.AsSpan().Fill(1);
+            }
+            else
+            {
+                Debug.Assert(waitTimes.Length == MaxBusAccessType * MaxBusAccessInfoMemoryType);
+
+                _waitTimes = waitTimes;
+            }
         }
 
-        public MemoryBackedDevice(ReadOnlySpan<byte> data, int size) : this(size)
+        public MemoryBackedDevice(ReadOnlySpan<byte> data, int size, byte[] waitTimes = null) : this(size, waitTimes)
         {
             data.CopyTo(_data);
         }
@@ -60,6 +91,11 @@ namespace TeaTimeAdvance.Device
         public virtual void Write32(uint baseAddress, uint address, uint value)
         {
             BinaryPrimitives.WriteUInt32LittleEndian(GetSpan(baseAddress, address, sizeof(uint)), value);
+        }
+
+        public virtual void UpdateScheduler(BusContext context, uint address, BusAccessType accessType, BusAccessInfo accessInfo)
+        {
+            context.UpdateCycles(_waitTimes[(int)(accessInfo & BusAccessInfo.MemoryMask) * (int)accessType]);
         }
     }
 }

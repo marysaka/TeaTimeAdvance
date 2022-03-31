@@ -3,12 +3,13 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common;
+using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Device
 {
-    public class StructBackedDevice<T> : IBusDevice where T: unmanaged
+    public class StructBackedDevice<T> : IBusDevice where T : unmanaged
     {
-        public delegate void WriteCallbackDelegate(ref T data);
+        public delegate void WriteCallbackDelegate(ref T data, BusAccessInfo info);
 
         private T _backingData;
         private WriteCallbackDelegate[] _writeCallbacks;
@@ -30,7 +31,7 @@ namespace TeaTimeAdvance.Device
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint GetIndex<U>(uint baseAddress, uint address) where U: unmanaged
+        private static uint GetIndex<U>(uint baseAddress, uint address) where U : unmanaged
         {
             uint offset = address - baseAddress;
 
@@ -40,7 +41,7 @@ namespace TeaTimeAdvance.Device
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private ref U GetAtAddress<U>(uint baseAddress, uint address) where U: unmanaged
+        private ref U GetAtAddress<U>(uint baseAddress, uint address) where U : unmanaged
         {
             return ref Unsafe.Add(ref Unsafe.As<T, U>(ref GetBackingDataRef()), GetIndex<U>(baseAddress, address));
         }
@@ -64,39 +65,48 @@ namespace TeaTimeAdvance.Device
         {
             GetAtAddress<ushort>(baseAddress, address) = value;
 
-            SignalWriteAtOffset(address - baseAddress);
+            SignalWriteAtOffset(address - baseAddress, BusAccessInfo.Memory16);
         }
 
         public void Write32(uint baseAddress, uint address, uint value)
         {
             GetAtAddress<uint>(baseAddress, address) = value;
 
-            SignalWriteAtOffset(address - baseAddress);
+            SignalWriteAtOffset(address - baseAddress, BusAccessInfo.Memory32);
         }
 
         public void Write8(uint baseAddress, uint address, byte value)
         {
             GetAtAddress<byte>(baseAddress, address) = value;
 
-            SignalWriteAtOffset(address - baseAddress);
+            SignalWriteAtOffset(address - baseAddress, BusAccessInfo.Memory8);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void SignalWriteAtOffset(uint offset)
+        private void SignalWriteAtOffset(uint offset, BusAccessInfo info)
         {
-            _writeCallbacks[offset]?.Invoke(ref GetBackingDataRef());
+            _writeCallbacks[offset]?.Invoke(ref GetBackingDataRef(), BusAccessInfo.Write | info);
         }
 
         public void RegisterWriteCallback(string fieldName, WriteCallbackDelegate callback)
         {
             int offset = UnsafeHelper.OffsetOf<T>(fieldName);
+            int typeSize = UnsafeHelper.SizeOf<T>(fieldName);
 
             if (offset == -1)
             {
                 throw new InvalidOperationException($"{fieldName} not found in {typeof(T).Name}");
             }
 
-            _writeCallbacks[offset] = callback;
+            for (int i = 0; i < typeSize; i++)
+            {
+                _writeCallbacks[offset + i] = callback;
+            }
+        }
+
+        public void UpdateScheduler(BusContext context, uint address, BusAccessType accessType, BusAccessInfo accessInfo)
+        {
+            context.UpdateCycles(1);
         }
     }
 }

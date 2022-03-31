@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace TeaTimeAdvance.Common
 {
 
     public static class UnsafeHelper
     {
+        public static int SizeOf<T>(string fieldName) where T : unmanaged
+        {
+            return SizeOf(typeof(T).GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).FieldType);
+        }
+
         // NOTE: From Ryujinx graphics device project.
         public static int SizeOf(Type type)
         {
@@ -64,7 +67,7 @@ namespace TeaTimeAdvance.Common
             };
         }
 
-        public static int OffsetOf<T>(string fieldName) where T: unmanaged
+        public static int OffsetOf<T>(string fieldName) where T : unmanaged
         {
             var fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             int offset = 0;

@@ -25,7 +25,7 @@ namespace TeaTimeAdvance.Tests.Device.IO
             CheckRegister(nameof(IORegisters.DISPCNT), 0x0);
             CheckRegister(nameof(IORegisters.GREENSWAP), 0x2);
             CheckRegister(nameof(IORegisters.DISPSTAT), 0x4);
-            CheckRegister(nameof(IORegisters.VCOUNT),0x6);
+            CheckRegister(nameof(IORegisters.VCOUNT), 0x6);
             CheckRegister(nameof(IORegisters.BG0CNT), 0x8);
             CheckRegister(nameof(IORegisters.BG1CNT), 0xA);
             CheckRegister(nameof(IORegisters.BG2CNT), 0xC);

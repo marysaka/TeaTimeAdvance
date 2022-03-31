@@ -51,6 +51,18 @@ namespace TeaTimeAdvance.Cpu
             State.Register(CpuRegister.PC) += InstructionDecoderHelper.ThumbInstructionSize;
         }
 
+        public void ReloadPipeline()
+        {
+            if (State.StatusRegister.HasFlag(CurrentProgramStatusRegister.Thumb))
+            {
+                Pipeline.ReloadForThumb(this);
+            }
+            else
+            {
+                Pipeline.ReloadForArm(this);
+            }
+        }
+
         public void SetStatusFlag(CurrentProgramStatusRegister field, bool value)
         {
             State.SetStatusFlag(field, value);
@@ -64,6 +76,11 @@ namespace TeaTimeAdvance.Cpu
         public void Update()
         {
             Pipeline.Update(this);
+        }
+
+        public void Idle()
+        {
+            Scheduler.UpdateCycles(1);
         }
     }
 }

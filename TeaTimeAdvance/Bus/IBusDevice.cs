@@ -1,8 +1,12 @@
+using TeaTimeAdvance.Scheduler;
+
 namespace TeaTimeAdvance.Bus
 {
     public interface IBusDevice
     {
         uint MappedSize { get; }
+
+        void UpdateScheduler(BusContext context, uint address, BusAccessType accessType, BusAccessInfo accessInfo);
 
         byte Read8(uint baseAddress, uint address);
 
