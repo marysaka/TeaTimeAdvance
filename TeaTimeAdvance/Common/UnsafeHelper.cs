@@ -66,7 +66,7 @@ namespace TeaTimeAdvance.Common
 
         public static int OffsetOf<T>(string fieldName) where T: unmanaged
         {
-            var fields = typeof(T).GetFields();
+            var fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             int offset = 0;
 
             for (int fieldIndex = 0; fieldIndex < fields.Length; fieldIndex++)
