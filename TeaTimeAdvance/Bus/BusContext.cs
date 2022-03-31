@@ -30,7 +30,9 @@ namespace TeaTimeAdvance.Bus
 
             Registers.RegisterWriteCallback(nameof(IORegisters.DISPCNT), (ref IORegisters data) =>
             {
-                Console.WriteLine("TOUCHED DISPSTAT");
+                string line = data.DISPCNT.ToString();
+
+                Console.WriteLine(line);
             });
         }
 

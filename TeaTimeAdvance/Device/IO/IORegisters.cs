@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using TeaTimeAdvance.Device.IO.LCD;
 
 namespace TeaTimeAdvance.Device.IO
 {
@@ -7,7 +8,7 @@ namespace TeaTimeAdvance.Device.IO
     {
         // LCD I/O Registers
         // TODO: Enums
-        public ushort DISPCNT;
+        public LCDControl DISPCNT;
         public ushort GREENSWAP;
         public ushort DISPSTAT;
         public ushort VCOUNT;
