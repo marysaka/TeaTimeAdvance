@@ -3,6 +3,7 @@ using System.Diagnostics;
 using TeaTimeAdvance.Common;
 using TeaTimeAdvance.Device;
 using TeaTimeAdvance.Device.IO;
+using TeaTimeAdvance.Ppu;
 using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Bus
@@ -34,7 +35,7 @@ namespace TeaTimeAdvance.Bus
             });
         }
 
-        public void Initialize(byte[] bios, byte[] rom)
+        public void Initialize(PpuContext ppuContext, byte[] bios, byte[] rom)
         {
             // BIOS [0x00000000 - 0x00003FFF]
             RegisterDevice(0x00000000, new BiosDevice(bios));
@@ -52,7 +53,22 @@ namespace TeaTimeAdvance.Bus
             // IO registers [0x04000000 - 0x040003FE]
             RegisterDevice(0x04000000, Registers);
 
-            // TODO: PPU memory mapping
+            // BG/OBJ Palette RAM (1 KiB) [0x05000000 - 0x050003FF]
+            RegisterDevice(0x05000000, new MemoryBackedDevice(ppuContext.PaletteMemory, new byte[]
+            {
+                1, 1, 2,
+                1, 1, 2,
+            }));
+
+            // VRAM - Video RAM (96 KiB) [0x06000000 - 0x06017FFF]
+            RegisterDevice(0x06000000, new MemoryBackedDevice(ppuContext.VideoMemory, new byte[]
+            {
+                1, 1, 2,
+                1, 1, 2,
+            }));
+
+            // OAM - OBJ Attributes (1 KiB) [0x07000000 - 0x070003FF]
+            RegisterDevice(0x07000000, new MemoryBackedDevice(ppuContext.ObjectAttributesMemory));
 
             // ROM (variable up to 128 MiB) [0x08000000 - 0x0E00FFFF]
             RegisterDevice(0x08000000, new RomDevice(rom));

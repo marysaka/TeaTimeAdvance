@@ -1,6 +1,7 @@
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu;
 using TeaTimeAdvance.Cpu.State;
+using TeaTimeAdvance.Ppu;
 using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance
@@ -12,17 +13,19 @@ namespace TeaTimeAdvance
         private SchedulerContext _schedulerContext;
         private BusContext _busContext;
         private CpuContext _cpuContext;
+        private PpuContext _ppuContext;
 
         public EmulationContext()
         {
             _schedulerContext = new SchedulerContext();
             _busContext = new BusContext(_schedulerContext);
             _cpuContext = new CpuContext(_schedulerContext, _busContext);
+            _ppuContext = new PpuContext();
         }
 
         public void Initialize(byte[] bios, byte[] rom)
         {
-            _busContext.Initialize(bios, rom);
+            _busContext.Initialize(_ppuContext, bios, rom);
 
             Reset(true);
         }
