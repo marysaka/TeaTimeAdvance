@@ -35,10 +35,9 @@ namespace TeaTimeAdvance.Device
             }
         }
 
-        public MemoryBackedDevice(ReadOnlySpan<byte> data, byte[] waitTimes = null)
+        public MemoryBackedDevice(byte[] data, byte[] waitTimes = null)
         {
-            // Enforce a full copy here.
-            _data = data.ToArray();
+            _data = data;
 
             if (waitTimes == null)
             {

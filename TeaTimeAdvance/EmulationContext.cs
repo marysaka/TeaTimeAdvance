@@ -1,4 +1,3 @@
-using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu;
 using TeaTimeAdvance.Cpu.State;
@@ -21,7 +20,7 @@ namespace TeaTimeAdvance
             _cpuContext = new CpuContext(_schedulerContext, _busContext);
         }
 
-        public void Initialize(ReadOnlySpan<byte> bios, ReadOnlySpan<byte> rom)
+        public void Initialize(byte[] bios, byte[] rom)
         {
             _busContext.Initialize(bios, rom);
 

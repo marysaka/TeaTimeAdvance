@@ -17,8 +17,8 @@ namespace TeaTimeAdvance
         {
             EmulationContext context = new EmulationContext();
 
-            ReadOnlySpan<byte> bios = File.ReadAllBytes(options.BiosPath);
-            ReadOnlySpan<byte> rom = File.ReadAllBytes(options.GamePath);
+            byte[] bios = File.ReadAllBytes(options.BiosPath);
+            byte[] rom = File.ReadAllBytes(options.GamePath);
 
             context.Initialize(bios, rom);
 

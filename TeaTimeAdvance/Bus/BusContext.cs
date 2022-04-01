@@ -34,7 +34,7 @@ namespace TeaTimeAdvance.Bus
             });
         }
 
-        public void Initialize(ReadOnlySpan<byte> bios, ReadOnlySpan<byte> rom)
+        public void Initialize(byte[] bios, byte[] rom)
         {
             // BIOS [0x00000000 - 0x00003FFF]
             RegisterDevice(0x00000000, new BiosDevice(bios));
