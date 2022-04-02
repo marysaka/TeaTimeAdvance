@@ -10,7 +10,7 @@ namespace TeaTimeAdvance.Device.IO
         // TODO: Enums
         public LCDControl DISPCNT;
         public ushort GREENSWAP;
-        public ushort DISPSTAT;
+        public LCDStatus DISPSTAT;
         public ushort VCOUNT;
         public ushort BG0CNT;
         public ushort BG1CNT;

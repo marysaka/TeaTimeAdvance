@@ -22,15 +22,15 @@ namespace TeaTimeAdvance.Scheduler
             _waiters.Clear();
         }
 
-        public ISchedulerWaiter Register(ulong cycles, Action callback)
+        public ISchedulerWaiter Register(int cycles, Action callback)
         {
-            ISchedulerWaiter waiter = new SchedulerWaiterHandle(CurrentCycle + cycles, callback);
+            ISchedulerWaiter waiter = new SchedulerWaiterHandle(CurrentCycle + (ulong)cycles, callback);
 
             int targetIndex;
 
             for (targetIndex = 0; targetIndex < _waiters.Count; targetIndex++)
             {
-                if (_waiters[targetIndex].Threshold >= waiter.Threshold)
+                if (_waiters[targetIndex].Threshold > waiter.Threshold)
                 {
                     break;
                 }

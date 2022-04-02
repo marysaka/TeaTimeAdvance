@@ -5,11 +5,11 @@ namespace TeaTimeAdvance.Tests.Scheduler
 {
     class SchedulerContextTests
     {
-        [TestCase(1UL, 1UL, ExpectedResult = true)]
-        [TestCase(2UL, 1UL, ExpectedResult = false)]
-        [TestCase(3UL, 4UL, ExpectedResult = true)]
-        [TestCase(4UL, 3UL, ExpectedResult = false)]
-        public bool EnsureSimpleTest(ulong thresholdCyclesCount, ulong updateCyclesCount)
+        [TestCase(1, 1UL, ExpectedResult = true)]
+        [TestCase(2, 1UL, ExpectedResult = false)]
+        [TestCase(3, 4UL, ExpectedResult = true)]
+        [TestCase(4, 3UL, ExpectedResult = false)]
+        public bool EnsureSimpleTest(int thresholdCyclesCount, ulong updateCyclesCount)
         {
             SchedulerContext scheduler = new SchedulerContext();
 

@@ -4,12 +4,12 @@ using TeaTimeAdvance.Cpu.State;
 using TeaTimeAdvance.Ppu;
 using TeaTimeAdvance.Scheduler;
 
+using static TeaTimeAdvance.Ppu.PpuContext;
+
 namespace TeaTimeAdvance
 {
     public class EmulationContext
     {
-        private const int VerticalDimensionsCycles = 280896;
-
         private SchedulerContext _schedulerContext;
         private BusContext _busContext;
         private CpuContext _cpuContext;
@@ -20,7 +20,7 @@ namespace TeaTimeAdvance
             _schedulerContext = new SchedulerContext();
             _busContext = new BusContext(_schedulerContext);
             _cpuContext = new CpuContext(_schedulerContext, _busContext);
-            _ppuContext = new PpuContext();
+            _ppuContext = new PpuContext(_schedulerContext, _busContext);
         }
 
         public void Initialize(byte[] bios, byte[] rom)
@@ -32,7 +32,9 @@ namespace TeaTimeAdvance
 
         private void Reset(bool skipBios)
         {
+            _schedulerContext.Reset();
             _cpuContext.Reset();
+            _ppuContext.Reset();
 
             if (skipBios)
             {
@@ -53,7 +55,7 @@ namespace TeaTimeAdvance
 
         public void ExecuteFrame()
         {
-            Execute(VerticalDimensionsCycles);
+            Execute(CyclesPerRefresh);
         }
 
         public void Execute(ulong cycles)
