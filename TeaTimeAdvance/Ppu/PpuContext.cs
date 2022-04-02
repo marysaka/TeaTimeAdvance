@@ -152,7 +152,11 @@ namespace TeaTimeAdvance.Ppu
 
             if (!registers.DISPCNT.ForcedBlank)
             {
-                throw new NotImplementedException();
+                switch (registers.DISPCNT.BackgroundMode)
+                {
+                    default:
+                        throw new NotImplementedException(registers.DISPCNT.BackgroundMode.ToString());
+                }
             }
             else
             {

@@ -3,6 +3,6 @@
     public record struct LCDStatus
     {
         public LCDStatusFlags Flags;
-        public ushort VerticalCount;
+        public byte VerticalCount;
     }
 }

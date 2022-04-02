@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using TeaTimeAdvance.Common.Memory;
 using TeaTimeAdvance.Device.IO.LCD;
 
 namespace TeaTimeAdvance.Device.IO
@@ -7,23 +8,13 @@ namespace TeaTimeAdvance.Device.IO
     public struct IORegisters
     {
         // LCD I/O Registers
-        // TODO: Enums
+        // TODO: Enums / Structs
         public LCDControl DISPCNT;
         public ushort GREENSWAP;
         public LCDStatus DISPSTAT;
         public ushort VCOUNT;
-        public ushort BG0CNT;
-        public ushort BG1CNT;
-        public ushort BG2CNT;
-        public ushort BG3CNT;
-        public ushort BG0HOFS;
-        public ushort BG0VOFS;
-        public ushort BG1HOFS;
-        public ushort BG1VOFS;
-        public ushort BG2HOFS;
-        public ushort BG2VOFS;
-        public ushort BG3HOFS;
-        public ushort BG3VOFS;
+        public Array4<BackgroundControl> BGCNT;
+        public Array4<BackgroundScrollingControl> BGOFS;
         public ushort BG2PA;
         public ushort BG2PB;
         public ushort BG2PC;
