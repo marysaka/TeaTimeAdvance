@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Device;
 using TeaTimeAdvance.Device.IO;
 using TeaTimeAdvance.Device.IO.LCD;
 using TeaTimeAdvance.Scheduler;
+using Point = TeaTimeAdvance.Device.IO.LCD.Point;
 
 namespace TeaTimeAdvance.Ppu
 {
     public class PpuContext
     {
-        private static readonly Color Blank = ConvertRGB555(0x1F, 0x1F, 0x1F);
+        private static readonly Color Blank = ColorRGB555.ConvertRGB555(0x1F, 0x1F, 0x1F);
 
         public const int ScreenWidth = 240;
         public const int ScreenHeight = 160;
@@ -32,6 +34,7 @@ namespace TeaTimeAdvance.Ppu
         private const int VideoMemorySize = 0x18000;
         private const int ObjectAttributesMemorySize = 0x1000;
 
+
         private PpuState _state;
         private StructBackedDevice<IORegisters> _registersDevice;
         private SchedulerContext _scheduler;
@@ -39,6 +42,8 @@ namespace TeaTimeAdvance.Ppu
         public byte[] PaletteMemory { get; }
         public byte[] VideoMemory { get; }
         public byte[] ObjectAttributesMemory { get; }
+
+        private ReadOnlySpan<ColorRGB555> Mode3FrameBuffer => MemoryMarshal.Cast<byte, ColorRGB555>(VideoMemory)[..(ScreenWidth * ScreenHeight)];
 
         public PpuContext(SchedulerContext scheduler, BusContext busContext)
         {
@@ -53,6 +58,8 @@ namespace TeaTimeAdvance.Ppu
 
         public void Reset()
         {
+            _registersDevice.RegisterWriteCallback(nameof(IORegisters.BGAP), (ref IORegisters data, BusAccessInfo info) => _state.ReloadAffineRegisters(data.BGAP.ToSpan()));
+
             ref IORegisters registers = ref _registersDevice.Device;
 
             // TODO: Reset registers
@@ -63,13 +70,9 @@ namespace TeaTimeAdvance.Ppu
             _scheduler.Register(CyclesPerRefresh, HandleVerticalBlank);
         }
 
-        private static Color ConvertRGB555(byte r, byte g, byte b)
+        private static bool IsOutOfScreen(int x, int y, int width, int height)
         {
-            r <<= 3;
-            g <<= 3;
-            b <<= 3;
-
-            return Color.FromArgb(r, g, b);
+            return x < 0 || y < 0 || x >= width || y >= height;
         }
 
         private void HandleHorizontalDraw()
@@ -146,21 +149,61 @@ namespace TeaTimeAdvance.Ppu
             _scheduler.Register(CyclesPerRefresh, HandleVerticalBlank);
         }
 
+        private void RenderBitmapMode3Scanline(ref IORegisters registers, Span<Color> backgroundScanline)
+        {
+            BackgroundControl backgroundControl = registers.BGCNT[2];
+
+            Point referencePoint = _state.ReferencePoints[0];
+
+            ushort pa = registers.BGAP[0].PA;
+            ushort pc = registers.BGAP[0].PC;
+
+            for (int index = 0; index < backgroundScanline.Length; index++)
+            {
+                int x = referencePoint.X >> 3;
+                int y = referencePoint.Y >> 3;
+
+                if (backgroundControl.Mosaic)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    referencePoint.X += pa;
+                    referencePoint.Y += pc;
+                }
+
+                if (!IsOutOfScreen(x, y, ScreenWidth, ScreenHeight))
+                {
+                    backgroundScanline[x] = Mode3FrameBuffer[y * ScreenWidth + x].ToColor();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+
         private void RenderScanline()
         {
             ref IORegisters registers = ref _registersDevice.Device;
+
+            Span<Color> scanlineSpan = _state.ScreenBuffer.Slice(ScreenWidth * registers.VCOUNT, ScreenWidth);
 
             if (!registers.DISPCNT.ForcedBlank)
             {
                 switch (registers.DISPCNT.BackgroundMode)
                 {
+                    case BackgroundMode.Mode3:
+                        RenderBitmapMode3Scanline(ref registers, scanlineSpan);
+                        break;
                     default:
                         throw new NotImplementedException(registers.DISPCNT.BackgroundMode.ToString());
                 }
             }
             else
             {
-                _state.ScreenBuffer.Slice(ScreenWidth * registers.VCOUNT, ScreenWidth).Fill(Blank);
+                scanlineSpan.Fill(Blank);
             }
         }
     }
