@@ -13,20 +13,15 @@ namespace TeaTimeAdvance.Ppu
         public byte G => (byte)((_value >> 5) & 0x1F);
         public byte B => (byte)((_value >> 10) & 0x1F);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Color ToColor()
+        public ColorRGB555(byte r, byte g, byte b)
         {
-            return ConvertRGB555(R, G, B);
+            _value = (ushort)((b & 0x1F) << 10 | (g & 0x1F) << 5 | (r & 0x1F) << 0);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Color ConvertRGB555(byte r, byte g, byte b)
+        public uint ToRGBA8888()
         {
-            r <<= 3;
-            g <<= 3;
-            b <<= 3;
-
-            return Color.FromArgb(r, g, b);
+            return (uint)(byte.MaxValue << 24 | B << 16 | B << 8 | R << 0);
         }
     }
 }

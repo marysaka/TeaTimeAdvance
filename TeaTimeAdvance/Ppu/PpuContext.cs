@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Device;
 using TeaTimeAdvance.Device.IO;
 using TeaTimeAdvance.Device.IO.LCD;
 using TeaTimeAdvance.Scheduler;
-using Point = TeaTimeAdvance.Device.IO.LCD.Point;
 
 namespace TeaTimeAdvance.Ppu
 {
     public class PpuContext
     {
-        private static readonly Color Blank = ColorRGB555.ConvertRGB555(0x1F, 0x1F, 0x1F);
+        private static readonly uint Blank = new ColorRGB555(0x1F, 0x1F, 0x1F).ToRGBA8888();
 
         public const int ScreenWidth = 240;
         public const int ScreenHeight = 160;
@@ -149,7 +147,7 @@ namespace TeaTimeAdvance.Ppu
             _scheduler.Register(CyclesPerRefresh, HandleVerticalBlank);
         }
 
-        private void RenderBitmapMode3Scanline(ref IORegisters registers, Span<Color> backgroundScanline)
+        private void RenderBitmapMode3Scanline(ref IORegisters registers, Span<uint> backgroundScanline)
         {
             BackgroundControl backgroundControl = registers.BGCNT[2];
 
@@ -175,7 +173,7 @@ namespace TeaTimeAdvance.Ppu
 
                 if (!IsOutOfScreen(x, y, ScreenWidth, ScreenHeight))
                 {
-                    backgroundScanline[x] = Mode3FrameBuffer[y * ScreenWidth + x].ToColor();
+                    backgroundScanline[x] = Mode3FrameBuffer[y * ScreenWidth + x].ToRGBA8888();
                 }
                 else
                 {
@@ -188,7 +186,7 @@ namespace TeaTimeAdvance.Ppu
         {
             ref IORegisters registers = ref _registersDevice.Device;
 
-            Span<Color> scanlineSpan = _state.ScreenBuffer.Slice(ScreenWidth * registers.VCOUNT, ScreenWidth);
+            Span<uint> scanlineSpan = _state.ScreenBuffer.Slice(ScreenWidth * registers.VCOUNT, ScreenWidth);
 
             if (!registers.DISPCNT.ForcedBlank)
             {

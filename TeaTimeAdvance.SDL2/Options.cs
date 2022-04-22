@@ -1,6 +1,6 @@
 using CommandLine;
 
-namespace TeaTimeAdvance
+namespace TeaTimeAdvance.SDL2
 {
     class Options
     {

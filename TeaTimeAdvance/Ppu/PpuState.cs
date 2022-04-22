@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using TeaTimeAdvance.Common.Memory;
 using TeaTimeAdvance.Device.IO.LCD;
 using static TeaTimeAdvance.Ppu.PpuContext;
-using Point = TeaTimeAdvance.Device.IO.LCD.Point;
 
 namespace TeaTimeAdvance.Ppu
 {
@@ -11,13 +9,13 @@ namespace TeaTimeAdvance.Ppu
     {
         public Array2<Point> ReferencePoints;
 
-        public Color[] RawScreenBuffer { get; }
+        public uint[] RawScreenBuffer { get; }
 
-        public Span<Color> ScreenBuffer => RawScreenBuffer;
+        public Span<uint> ScreenBuffer => RawScreenBuffer;
 
         public PpuState()
         {
-            RawScreenBuffer = new Color[ScreenWidth * ScreenHeight];
+            RawScreenBuffer = new uint[ScreenWidth * ScreenHeight];
         }
 
         internal void ReloadAffineRegisters(ReadOnlySpan<BackgroundAffineParameter> backgroundAffineParameters)

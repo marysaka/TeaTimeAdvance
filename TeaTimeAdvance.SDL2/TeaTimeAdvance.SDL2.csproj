@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <StartupObject>TeaTimeAdvance.SDL2.Program</StartupObject>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="ppy.SDL2-CS" Version="1.0.501-alpha" />
+    <ProjectReference Include="..\TeaTimeAdvance\TeaTimeAdvance.csproj" />
+  </ItemGroup>
+
+</Project>
