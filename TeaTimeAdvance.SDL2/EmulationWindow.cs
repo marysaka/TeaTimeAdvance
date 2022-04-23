@@ -8,7 +8,7 @@ namespace TeaTimeAdvance.SDL2
 {
     class EmulationWindow : IDisposable
     {
-        private const int WindowScaling = 1;
+        private const int WindowScaling = 2;
 
         private const int WindowWidth = PpuContext.ScreenWidth * WindowScaling;
         private const int WindowHeight = PpuContext.ScreenHeight * WindowScaling;
@@ -104,7 +104,7 @@ namespace TeaTimeAdvance.SDL2
                 ReadOnlySpan<uint> frame = _context.ExecuteFrame();
 
 
-                SDL_Rect rect = new SDL_Rect
+                SDL_Rect textureRect = new SDL_Rect
                 {
                     w = PpuContext.ScreenWidth,
                     h = PpuContext.ScreenHeight,
@@ -112,30 +112,27 @@ namespace TeaTimeAdvance.SDL2
                     y = 0,
                 };
 
-                int res = SDL_LockTexture(_windowSurfaceHandle, ref rect, out IntPtr pixels, out _);
-
-                if (res < 0)
+                SDL_Rect screenRect = new SDL_Rect
                 {
-                    string error = SDL_GetError();
+                    w = WindowWidth,
+                    h = WindowHeight,
+                    x = 0,
+                    y = 0,
+                };
 
-
-                    Console.WriteLine(error);
-                }
-
-
-                Debug.Assert(pixels != IntPtr.Zero);
+                SDL_LockTexture(_windowSurfaceHandle, ref textureRect, out IntPtr pixels, out _);
 
                 unsafe
                 {
-                    frame.CopyTo(new Span<uint>((uint*)pixels, rect.w * rect.h));
+                    frame.CopyTo(new Span<uint>((uint*)pixels, textureRect.w * textureRect.h));
                 }
 
                 SDL_UnlockTexture(_windowSurfaceHandle);
-                SDL_RenderCopy(_rendererHandle, _windowSurfaceHandle, ref rect, ref rect);
+                SDL_RenderCopy(_rendererHandle, _windowSurfaceHandle, ref textureRect, ref screenRect);
 
                 // TODO: Render frame here
                 // TODO: Handle keyboard and controls
-                // TODO: Move rendering in its own thread and still pump here?
+                // TODO: Move rendering in its own thread and still pump events here?
                 SDL_RenderPresent(_rendererHandle);
             }
         }
