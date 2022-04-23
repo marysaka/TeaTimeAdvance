@@ -81,7 +81,7 @@ namespace TeaTimeAdvance.Ppu
             // TODO: Reset registers
 
 
-            _scheduler.Register(CyclesPerHorizontalDraw, HandleHorizontalBlank);
+            _scheduler.Register(CyclesPerScanline, HandleHorizontalBlank);
             _scheduler.Register(CyclesPerScanline, HandleHorizontalDraw);
             _scheduler.Register(CyclesPerRefresh, HandleVerticalBlank);
         }
@@ -160,7 +160,7 @@ namespace TeaTimeAdvance.Ppu
 
             // TODO: the reset
 
-            _scheduler.Register(CyclesPerHorizontalDraw, HandleHorizontalBlank);
+            _scheduler.Register(CyclesPerScanline, HandleHorizontalBlank);
         }
 
         private void HandleVerticalBlank()
