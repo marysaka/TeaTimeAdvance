@@ -3,13 +3,12 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Common;
-using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Device
 {
     public class StructBackedDevice<T> : IBusDevice where T : unmanaged
     {
-        public delegate void WriteCallbackDelegate(ref T data, BusAccessInfo info);
+        public delegate void WriteCallbackDelegate(ref T data, uint offset, BusAccessInfo info);
 
         private T _backingData;
         private WriteCallbackDelegate[] _writeCallbacks;
@@ -85,7 +84,7 @@ namespace TeaTimeAdvance.Device
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SignalWriteAtOffset(uint offset, BusAccessInfo info)
         {
-            _writeCallbacks[offset]?.Invoke(ref GetBackingDataRef(), BusAccessInfo.Write | info);
+            _writeCallbacks[offset]?.Invoke(ref GetBackingDataRef(), offset, BusAccessInfo.Write | info);
         }
 
         public void RegisterWriteCallback(string fieldName, WriteCallbackDelegate callback)

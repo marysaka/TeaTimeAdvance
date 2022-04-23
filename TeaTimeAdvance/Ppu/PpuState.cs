@@ -18,10 +18,9 @@ namespace TeaTimeAdvance.Ppu
             RawScreenBuffer = new uint[ScreenWidth * ScreenHeight];
         }
 
-        public void ReloadAffineRegisters(ReadOnlySpan<BackgroundAffineParameter> backgroundAffineParameters)
+        public void ReloadAffineRegister(int index, ref BackgroundAffineParameter backgroundAffineParameter)
         {
-            ReferencePoints[0] = backgroundAffineParameters[0].ReferencePoint;
-            ReferencePoints[1] = backgroundAffineParameters[1].ReferencePoint;
+            ReferencePoints[index] = backgroundAffineParameter.ReferencePoint;
         }
 
         public void UpdateAffineRegisters(ReadOnlySpan<BackgroundAffineParameter> backgroundAffineParameters)

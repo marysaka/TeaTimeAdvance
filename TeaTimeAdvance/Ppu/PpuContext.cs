@@ -58,7 +58,17 @@ namespace TeaTimeAdvance.Ppu
 
         public void Reset()
         {
-            _registersDevice.RegisterWriteCallback(nameof(IORegisters.BGAP), (ref IORegisters data, BusAccessInfo info) => _state.ReloadAffineRegisters(data.BGAP.ToSpan()));
+            _registersDevice.RegisterWriteCallback(nameof(IORegisters.BGAP), (ref IORegisters data, uint offset, BusAccessInfo info) =>
+            {
+                if (offset >= 0x28 && offset < 0x30)
+                {
+                    _state.ReloadAffineRegister(0, ref data.BGAP[0]);
+                }
+                else if (offset >= 0x38 && offset < 0x40)
+                {
+                    _state.ReloadAffineRegister(1, ref data.BGAP[1]);
+                }
+            });
 
             ref IORegisters registers = ref _registersDevice.Device;
 
@@ -117,7 +127,8 @@ namespace TeaTimeAdvance.Ppu
                     throw new NotImplementedException();
                 }
 
-                _state.ReloadAffineRegisters(registers.BGAP.ToSpan());
+                _state.ReloadAffineRegister(0, ref registers.BGAP[0]);
+                _state.ReloadAffineRegister(1, ref registers.BGAP[1]);
             }
 
             if (registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalCount) && registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalCountIRQ))
@@ -136,6 +147,7 @@ namespace TeaTimeAdvance.Ppu
             if (registers.VCOUNT < ScreenHeight)
             {
                 RenderScanline();
+                _state.UpdateAffineRegisters(registers.BGAP.ToSpan());
             }
 
             registers.DISPSTAT.Flags |= LCDStatusFlags.HorizontalBlank;
@@ -148,7 +160,6 @@ namespace TeaTimeAdvance.Ppu
 
             // TODO: the reset
 
-            _state.UpdateAffineRegisters(registers.BGAP.ToSpan());
             _scheduler.Register(CyclesPerHorizontalDraw, HandleHorizontalBlank);
         }
 

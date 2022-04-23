@@ -28,11 +28,6 @@ namespace TeaTimeAdvance.Bus
             _schedulerContext = schedulerContext;
             _pagesDeviceMapping = new IBusDevice[LastPage + 1];
             Registers = new StructBackedDevice<IORegisters>();
-
-            Registers.RegisterWriteCallback(nameof(IORegisters.DISPCNT), (ref IORegisters data, BusAccessInfo info) =>
-            {
-                Console.WriteLine(data.DISPCNT.ToString());
-            });
         }
 
         public void Initialize(PpuContext ppuContext, byte[] bios, byte[] rom)
