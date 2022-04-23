@@ -10,7 +10,7 @@ namespace TeaTimeAdvance.Ppu
 {
     public class PpuContext
     {
-        private static readonly uint Blank = new ColorRGB555(0x1F, 0x1F, 0x1F).ToRGBA8888();
+        private static readonly uint Blank = new ColorBGR555(0x1F, 0x1F, 0x1F).ToRGBA8888();
 
         public const int ScreenWidth = 240;
         public const int ScreenHeight = 160;
@@ -41,7 +41,9 @@ namespace TeaTimeAdvance.Ppu
         public byte[] VideoMemory { get; }
         public byte[] ObjectAttributesMemory { get; }
 
-        private ReadOnlySpan<ColorRGB555> Mode3FrameBuffer => MemoryMarshal.Cast<byte, ColorRGB555>(VideoMemory)[..(ScreenWidth * ScreenHeight)];
+        public PpuState State => _state;
+
+        private ReadOnlySpan<ColorBGR555> Mode3FrameBuffer => MemoryMarshal.Cast<byte, ColorBGR555>(VideoMemory)[..(ScreenWidth * ScreenHeight)];
 
         public PpuContext(SchedulerContext scheduler, BusContext busContext)
         {
@@ -59,6 +61,12 @@ namespace TeaTimeAdvance.Ppu
             _registersDevice.RegisterWriteCallback(nameof(IORegisters.BGAP), (ref IORegisters data, BusAccessInfo info) => _state.ReloadAffineRegisters(data.BGAP.ToSpan()));
 
             ref IORegisters registers = ref _registersDevice.Device;
+
+
+            registers.BGAP[0].PA = 0x100;
+            registers.BGAP[0].PD = 0x100;
+            registers.BGAP[1].PA = 0x100;
+            registers.BGAP[1].PD = 0x100;
 
             // TODO: Reset registers
 
@@ -101,6 +109,17 @@ namespace TeaTimeAdvance.Ppu
 
             registers.DISPSTAT.Flags &= ~LCDStatusFlags.HorizontalBlank;
 
+            if (registers.VCOUNT == ScreenHeight)
+            {
+                if (registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalBlankIRQ))
+                {
+                    // TODO: IRQ
+                    throw new NotImplementedException();
+                }
+
+                _state.ReloadAffineRegisters(registers.BGAP.ToSpan());
+            }
+
             if (registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalCount) && registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalCountIRQ))
             {
                 // TODO: IRQ
@@ -129,6 +148,7 @@ namespace TeaTimeAdvance.Ppu
 
             // TODO: the reset
 
+            _state.UpdateAffineRegisters(registers.BGAP.ToSpan());
             _scheduler.Register(CyclesPerHorizontalDraw, HandleHorizontalBlank);
         }
 
@@ -137,12 +157,6 @@ namespace TeaTimeAdvance.Ppu
             ref IORegisters registers = ref _registersDevice.Device;
 
             registers.VCOUNT = 0;
-
-            if (registers.DISPSTAT.Flags.HasFlag(LCDStatusFlags.VerticalBlankIRQ))
-            {
-                // TODO: IRQ
-                throw new NotImplementedException();
-            }
 
             _scheduler.Register(CyclesPerRefresh, HandleVerticalBlank);
         }
@@ -158,8 +172,8 @@ namespace TeaTimeAdvance.Ppu
 
             for (int index = 0; index < backgroundScanline.Length; index++)
             {
-                int x = referencePoint.X >> 3;
-                int y = referencePoint.Y >> 3;
+                int x = referencePoint.X >> 8;
+                int y = referencePoint.Y >> 8;
 
                 if (backgroundControl.Mosaic)
                 {
@@ -173,11 +187,12 @@ namespace TeaTimeAdvance.Ppu
 
                 if (!IsOutOfScreen(x, y, ScreenWidth, ScreenHeight))
                 {
-                    backgroundScanline[x] = Mode3FrameBuffer[y * ScreenWidth + x].ToRGBA8888();
+                    backgroundScanline[index] = Mode3FrameBuffer[y * ScreenWidth + x].ToRGBA8888();
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    // TODO: Is that correct?
+                    backgroundScanline[index] = Blank;
                 }
             }
         }

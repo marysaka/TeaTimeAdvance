@@ -1,3 +1,4 @@
+using System;
 using TeaTimeAdvance.Bus;
 using TeaTimeAdvance.Cpu;
 using TeaTimeAdvance.Cpu.State;
@@ -53,9 +54,11 @@ namespace TeaTimeAdvance
             return true;
         }
 
-        public void ExecuteFrame()
+        public ReadOnlySpan<uint> ExecuteFrame()
         {
             Execute(CyclesPerRefresh);
+
+            return _ppuContext.State.ScreenBuffer;
         }
 
         public void Execute(ulong cycles)

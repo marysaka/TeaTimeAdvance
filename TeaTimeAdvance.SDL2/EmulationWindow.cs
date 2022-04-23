@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using TeaTimeAdvance.Ppu;
 using static SDL2.SDL;
@@ -44,7 +45,7 @@ namespace TeaTimeAdvance.SDL2
             _rendererHandle = SDL_CreateRenderer(_windowHandle, -1, SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
             _windowSurfaceHandle = SDL_CreateTexture(_rendererHandle,
                                                      SDL_PIXELFORMAT_RGBA8888,
-                                                     (int)SDL_TextureAccess.SDL_TEXTUREACCESS_STREAMING,
+                                                     (int)(SDL_TextureAccess.SDL_TEXTUREACCESS_STREAMING),
                                                      PpuContext.ScreenWidth,
                                                      PpuContext.ScreenHeight);
 
@@ -82,13 +83,59 @@ namespace TeaTimeAdvance.SDL2
 
             while (_isRunning && _context.IsRunning())
             {
-                _context.ExecuteFrame();
+                SDL_PumpEvents();
+
+                ReadOnlySpan<byte> rawKeyboardState;
+
+                unsafe
+                {
+                    IntPtr statePtr = SDL_GetKeyboardState(out int numKeys);
+
+                    rawKeyboardState = new ReadOnlySpan<byte>((byte*)statePtr, numKeys);
+                }
+
+                if (rawKeyboardState[(int)SDL_Scancode.SDL_SCANCODE_ESCAPE] != 0)
+                {
+                    _isRunning = false;
+
+                    break;
+                }
+
+                ReadOnlySpan<uint> frame = _context.ExecuteFrame();
+
+
+                SDL_Rect rect = new SDL_Rect
+                {
+                    w = PpuContext.ScreenWidth,
+                    h = PpuContext.ScreenHeight,
+                    x = 0,
+                    y = 0,
+                };
+
+                int res = SDL_LockTexture(_windowSurfaceHandle, ref rect, out IntPtr pixels, out _);
+
+                if (res < 0)
+                {
+                    string error = SDL_GetError();
+
+
+                    Console.WriteLine(error);
+                }
+
+
+                Debug.Assert(pixels != IntPtr.Zero);
+
+                unsafe
+                {
+                    frame.CopyTo(new Span<uint>((uint*)pixels, rect.w * rect.h));
+                }
+
+                SDL_UnlockTexture(_windowSurfaceHandle);
+                SDL_RenderCopy(_rendererHandle, _windowSurfaceHandle, ref rect, ref rect);
 
                 // TODO: Render frame here
                 // TODO: Handle keyboard and controls
                 // TODO: Move rendering in its own thread and still pump here?
-
-                SDL_PumpEvents();
                 SDL_RenderPresent(_rendererHandle);
             }
         }

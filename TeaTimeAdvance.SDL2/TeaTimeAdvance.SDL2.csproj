@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject>TeaTimeAdvance.SDL2.Program</StartupObject>
     <TargetFramework>net6.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
