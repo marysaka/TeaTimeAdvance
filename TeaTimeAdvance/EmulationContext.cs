@@ -33,6 +33,7 @@ namespace TeaTimeAdvance
 
         private void Reset(bool skipBios)
         {
+            _busContext.Reset();
             _schedulerContext.Reset();
             _cpuContext.Reset();
             _ppuContext.Reset();

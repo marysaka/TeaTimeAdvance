@@ -4,7 +4,7 @@ using TeaTimeAdvance.Device.IO.LCD;
 
 namespace TeaTimeAdvance.Device.IO
 {
-    [StructLayout(LayoutKind.Sequential/* , Size = 0x400 */)]
+    [StructLayout(LayoutKind.Sequential /* , Size = 0x400 */)]
     public struct IORegisters
     {
         // LCD I/O Registers
@@ -27,14 +27,24 @@ namespace TeaTimeAdvance.Device.IO
         public ushort BLDCNT;
         public ushort BLDALPHA;
         public ushort BLDY;
-        private uint _unused56;
-
+        private Array10<byte> _unused56;
         // TODO: Sound Registers
+        private Array20<uint> _reservedSoundRegisters;
         // TODO: DMA Transfer Channels
+        private Array20<uint> _reservedDmaTransferChannels;
         // TODO: Timer Registers
+        private Array8<uint> _reservedTimerRegisters;
         // TODO: Serial Communication (1)
+        private Array4<uint> _reservedSerialCommunication1;
         // TODO: Keypad Input
+        private Array4<byte> _reservedkeypadInput;
         // TODO: Serial Communication (2)
-        // TODO: Interrupt, Waitstate, and Power-Down Control
+        private Array51<uint> _reservedSerialCommunication2;
+        // TODO: Interrupt
+        private Array4<byte> _reservedInterrupt;
+        public WaitstateControl WAITCNT;
+        private ushort _unused206;
+
+        // TODO: More interupt, Power-Down Control...
     }
 }

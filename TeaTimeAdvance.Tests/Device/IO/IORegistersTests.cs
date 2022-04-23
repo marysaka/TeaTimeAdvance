@@ -47,6 +47,8 @@ namespace TeaTimeAdvance.Tests.Device.IO
             // TODO: Keypad Input
             // TODO: Serial Communication (2)
             // TODO: Interrupt, Waitstate, and Power-Down Control
+
+            CheckRegister(nameof(IORegisters.WAITCNT), 0x204);
         }
     }
 }

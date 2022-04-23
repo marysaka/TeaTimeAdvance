@@ -18,8 +18,16 @@ namespace TeaTimeAdvance.Bus
         public const uint FirstPage = MinAddress >> PageGranuality;
         public const uint LastPage = MaxAddress >> PageGranuality;
 
+        public const uint WaitStatePageStart = 0x08000000 >> PageGranuality;
+        public const uint WaitStatePageEnd = 0x0F000000 >> PageGranuality;
+        public const uint WaitStatePageCount = WaitStatePageEnd - WaitStatePageStart;
+        public const int MaxBusAccessType = 2;
+
         private SchedulerContext _schedulerContext;
         private IBusDevice[] _pagesDeviceMapping;
+
+        private byte[] _romWaitBase;
+        private byte[] _romWait32;
 
         public StructBackedDevice<IORegisters> Registers { get; }
 
@@ -27,6 +35,8 @@ namespace TeaTimeAdvance.Bus
         {
             _schedulerContext = schedulerContext;
             _pagesDeviceMapping = new IBusDevice[LastPage + 1];
+            _romWaitBase = new byte[WaitStatePageCount * MaxBusAccessType];
+            _romWait32 = new byte[WaitStatePageCount * MaxBusAccessType];
             Registers = new StructBackedDevice<IORegisters>();
         }
 
@@ -66,7 +76,49 @@ namespace TeaTimeAdvance.Bus
             RegisterDevice(0x07000000, new MemoryBackedDevice(ppuContext.ObjectAttributesMemory));
 
             // ROM (variable up to 128 MiB) [0x08000000 - 0x0E00FFFF]
-            RegisterDevice(0x08000000, new RomDevice(rom));
+            RegisterDevice(0x08000000, new RomDevice(rom, _romWaitBase, _romWait32));
+
+            // Register WAITCNT handler
+            Registers.RegisterWriteCallback(nameof(IORegisters.WAITCNT), HandleWaitstateControlChange);
+        }
+
+        private void HandleWaitstateControlChange(ref IORegisters data, uint offset, BusAccessInfo info)
+        {
+            // TODO: probably more
+            UpdateInternaleWaitstate(data.WAITCNT);
+        }
+
+        private void UpdateInternaleWaitstate(WaitstateControl waitcnt)
+        {
+            _romWaitBase[0 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState0NonSequentialCycles;
+            _romWaitBase[1 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState0NonSequentialCycles;
+            _romWaitBase[2 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState1NonSequentialCycles;
+            _romWaitBase[3 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState1NonSequentialCycles;
+            _romWaitBase[4 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState2NonSequentialCycles;
+            _romWaitBase[5 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.WaitState2NonSequentialCycles;
+            _romWaitBase[6 + WaitStatePageCount * (int)BusAccessType.NonSequential] = waitcnt.SRAMWaitStateCycles;
+
+            _romWaitBase[0 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState0SequentialCycles;
+            _romWaitBase[1 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState0SequentialCycles;
+            _romWaitBase[2 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState1SequentialCycles;
+            _romWaitBase[3 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState1SequentialCycles;
+            _romWaitBase[4 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState2SequentialCycles;
+            _romWaitBase[5 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.WaitState2SequentialCycles;
+            _romWaitBase[6 + WaitStatePageCount * (int)BusAccessType.Sequential] = waitcnt.SRAMWaitStateCycles;
+
+            for (int i = 0; i < _romWait32.Length / MaxBusAccessType; i++)
+            {
+                long indexNonSequential = i + WaitStatePageCount * (int)BusAccessType.NonSequential;
+                long indexSequential = i + WaitStatePageCount * (int)BusAccessType.Sequential;
+
+                _romWait32[indexNonSequential] = (byte)(_romWaitBase[indexNonSequential] + _romWaitBase[indexSequential]);
+                _romWait32[indexSequential] = (byte)(_romWaitBase[indexSequential] * 2);
+            }
+        }
+
+        public void Reset()
+        {
+            UpdateInternaleWaitstate(Registers.Device.WAITCNT);
         }
 
         public void RegisterDevice(uint address, IBusDevice device)

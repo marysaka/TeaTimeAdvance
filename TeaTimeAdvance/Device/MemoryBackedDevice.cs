@@ -2,14 +2,11 @@ using System;
 using System.Buffers.Binary;
 using System.Diagnostics;
 using TeaTimeAdvance.Bus;
-using TeaTimeAdvance.Common;
-using TeaTimeAdvance.Scheduler;
 
 namespace TeaTimeAdvance.Device
 {
     public class MemoryBackedDevice : IBusDevice
     {
-        private const int MaxBusAccessType = 2;
         private const int MaxBusAccessInfoMemoryType = 3;
 
         protected byte[] _data;
@@ -24,12 +21,12 @@ namespace TeaTimeAdvance.Device
 
             if (waitTimes == null)
             {
-                _waitTimes = new byte[MaxBusAccessType * MaxBusAccessInfoMemoryType];
+                _waitTimes = new byte[BusContext.MaxBusAccessType * MaxBusAccessInfoMemoryType];
                 _waitTimes.AsSpan().Fill(1);
             }
             else
             {
-                Debug.Assert(waitTimes.Length == MaxBusAccessType * MaxBusAccessInfoMemoryType);
+                Debug.Assert(waitTimes.Length == BusContext.MaxBusAccessType * MaxBusAccessInfoMemoryType);
 
                 _waitTimes = waitTimes;
             }
@@ -41,12 +38,12 @@ namespace TeaTimeAdvance.Device
 
             if (waitTimes == null)
             {
-                _waitTimes = new byte[MaxBusAccessType * MaxBusAccessInfoMemoryType];
+                _waitTimes = new byte[BusContext.MaxBusAccessType * MaxBusAccessInfoMemoryType];
                 _waitTimes.AsSpan().Fill(1);
             }
             else
             {
-                Debug.Assert(waitTimes.Length == MaxBusAccessType * MaxBusAccessInfoMemoryType);
+                Debug.Assert(waitTimes.Length == BusContext.MaxBusAccessType * MaxBusAccessInfoMemoryType);
 
                 _waitTimes = waitTimes;
             }
@@ -94,7 +91,7 @@ namespace TeaTimeAdvance.Device
 
         public virtual void UpdateScheduler(BusContext context, uint address, BusAccessType accessType, BusAccessInfo accessInfo)
         {
-            context.UpdateCycles(_waitTimes[(int)(accessInfo & BusAccessInfo.MemoryMask) * (int)accessType]);
+            context.UpdateCycles(_waitTimes[(int)(accessInfo & BusAccessInfo.MemoryMask) + MaxBusAccessInfoMemoryType * (int)accessType]);
         }
     }
 }
