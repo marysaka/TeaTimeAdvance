@@ -32,10 +32,9 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<00x1111xxxxxxxxxxxxxxxxxxxxx", "MVN", MoveNot32, DisassembleDataProcesingOneOperand32);
 
             // PSR Transfer Format
-            // TODO: implement
-            SetArm("<<<<00010x001111xxxx000000000000", "MRS", null, DisassemblePSRTransferDisassembler32);
-            SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR", null, DisassemblePSRTransferDisassembler32);
-            SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR", null, DisassemblePSRTransferDisassembler32);
+            SetArm("<<<<00010x001111xxxx000000000000", "MRS", MoveStatusRegisterToRegister32, DisassemblePSRTransferDisassembler32);
+            SetArm("<<<<00010x10xxxx111100000000xxxx", "MSR", MoveRegisterToStatusRegister32, DisassemblePSRTransferDisassembler32);
+            SetArm("<<<<00x10x10xxxx1111xxxxxxxxxxxx", "MSR", MoveImmediateToStatusRegister32, DisassemblePSRTransferDisassembler32);
 
             // Halfword Data Transfer: register offset Format
             // TODO: implement
