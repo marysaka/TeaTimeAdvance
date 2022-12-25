@@ -166,7 +166,7 @@ namespace TeaTimeAdvance.Cpu
                     throw new NotImplementedException($"Unimplemented instruction: \"{info.Disassemble(opcode)}\"");
                 }
 
-                // Console.WriteLine($"0x{context.GetRegister(CpuRegister.PC):X8}: {info.Disassemble(opcode)} (0x{opcode:X8})");
+                Console.WriteLine($"0x{context.GetRegister(CpuRegister.PC):X8}: {info.Disassemble(opcode)} (0x{opcode:X8})");
 
                 info.ExecutionHandler(context, opcode);
             }

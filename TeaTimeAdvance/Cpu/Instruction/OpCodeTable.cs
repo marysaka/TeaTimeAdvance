@@ -57,9 +57,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
             SetArm("<<<<0000111xxxxxxxxxxxxx1001xxxx", "SMLAL", null, DisassembleMultiplyLong32);
 
             // Single Data Transfer Format
-            // TODO: implement
-            SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "STR", null, DisassembleSingleDataTransfer32);
-            SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR", null, DisassembleSingleDataTransfer32);
+            SetArm("<<<<01xxxxx0xxxxxxxxxxxxxxxxxxxx", "STR", StoreSingleDataTransfer32, DisassembleSingleDataTransfer32);
+            SetArm("<<<<01xxxxx1xxxxxxxxxxxxxxxxxxxx", "LDR", LoadSingleDataTransfer32, DisassembleSingleDataTransfer32);
 
             // Branch and Exchange Format
             SetArm("<<<<000100101111111111110001xxxx", "BX", BranchAndExchange32, DisassembleBranchExchange32);

@@ -13,46 +13,6 @@ namespace TeaTimeAdvance.Cpu.Instruction
 {
     public static partial class InstructionHandler
     {
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void PrepareHalfwordDataTransfer32(CpuContext context, CpuRegister rn, bool isUp, uint offset, out uint addressBase, out uint addressWithOffset)
-        {
-            context.BusAccessType = BusAccessType.NonSequential;
-            context.UpdateProgramCounter32();
-
-            addressBase = context.GetRegister(rn);
-
-            if (isUp)
-            {
-                addressWithOffset = addressBase + offset;
-            }
-            else
-            {
-                addressWithOffset = addressBase - offset;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void HandlePreHalfwordDataTransfer32(CpuContext context, bool isPreIndexing, uint addressBase, uint addressWithOffset, out uint address)
-        {
-            if (isPreIndexing)
-            {
-                address = addressWithOffset;
-            }
-            else
-            {
-                address = addressBase;
-            }
-        }
-
-        private static void HandlePostHalfwordDataTransfer32(CpuContext context, CpuRegister rn, bool isPreIndexing, bool writeBack, uint address)
-        {
-            if (!isPreIndexing || writeBack)
-            {
-                context.SetRegister(rn, address);
-            }
-        }
-
         public static void LoadHalfwordUnsignedDataImmediate32(CpuContext context, uint opcode)
         {
             HalfwordDataTransferImmediateFormat32 format = new HalfwordDataTransferImmediateFormat32
@@ -60,8 +20,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 Opcode = opcode
             };
 
-            PrepareHalfwordDataTransfer32(context, format.Rn, format.IsUp, format.Offset, out uint addressBase, out uint addressWithOffset);
-            HandlePreHalfwordDataTransfer32(context, format.IsPreIndexing, addressBase, addressWithOffset, out uint address);
+            PrepareDataTransfer32(context, format.Rn, format.IsUp, format.Offset, out uint addressBase, out uint addressWithOffset);
+            HandlePreDataTransfer32(context, format.IsPreIndexing, addressBase, addressWithOffset, out uint address);
 
             uint readValue;
 
@@ -75,7 +35,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 readValue = context.BusContext.Read16(address, BusAccessType.NonSequential);
             }
 
-            HandlePostHalfwordDataTransfer32(context, format.Rn, format.IsPreIndexing, format.WriteBack, addressWithOffset);
+            HandlePostDataTransfer32(context, format.Rn, format.IsPreIndexing, format.WriteBack, addressWithOffset);
 
             context.Idle();
             context.SetRegister(format.Rd, readValue);
@@ -93,8 +53,8 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 Opcode = opcode
             };
 
-            PrepareHalfwordDataTransfer32(context, format.Rn, format.IsUp, format.Offset, out uint addressBase, out uint addressWithOffset);
-            HandlePreHalfwordDataTransfer32(context, format.IsPreIndexing, addressBase, addressWithOffset, out uint address);
+            PrepareDataTransfer32(context, format.Rn, format.IsUp, format.Offset, out uint addressBase, out uint addressWithOffset);
+            HandlePreDataTransfer32(context, format.IsPreIndexing, addressBase, addressWithOffset, out uint address);
 
             if ((address & 1) != 0)
             {
@@ -107,7 +67,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 context.BusContext.Write16(address, (ushort)context.GetRegister(format.Rd), BusAccessType.NonSequential);
             }
 
-            HandlePostHalfwordDataTransfer32(context, format.Rn, format.IsPreIndexing, format.WriteBack, addressWithOffset);
+            HandlePostDataTransfer32(context, format.Rn, format.IsPreIndexing, format.WriteBack, addressWithOffset);
         }
     }
 }

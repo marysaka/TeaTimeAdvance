@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using TeaTimeAdvance.Ppu;
 using static SDL2.SDL;
