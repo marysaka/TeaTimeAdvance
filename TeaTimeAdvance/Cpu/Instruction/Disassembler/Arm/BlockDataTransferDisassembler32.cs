@@ -21,7 +21,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 writeBackModifier = "!";
             }
 
-            if (format.UseCurrentLevelBank)
+            if (format.UseUserLevelBank)
             {
                 specialModifier = "^";
             }
@@ -36,7 +36,7 @@ namespace TeaTimeAdvance.Cpu.Instruction
                 }
             }
 
-            return $"{info.Name}{GetConditionCodeName(opcode)} {format.Rd}{writeBackModifier}, {{{string.Join(", ", registerList)}}}{specialModifier}";
+            return $"{info.Name}{GetConditionCodeName(opcode)} {format.Rn}{writeBackModifier}, {{{string.Join(", ", registerList)}}}{specialModifier}";
         }
     }
 }

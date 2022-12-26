@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using TeaTimeAdvance.Cpu.State;
 
 namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
@@ -10,12 +11,14 @@ namespace TeaTimeAdvance.Cpu.Instruction.Definition.Arm
 
         uint IInstructionFormat32.Opcode => Opcode;
 
-        public CpuRegister Rd => ((IInstructionFormat32)this).GetRegisterByIndex(4);
+        public CpuRegister Rn => ((IInstructionFormat32)this).GetRegisterByIndex(4);
         public bool IsStore => (Opcode & (1 << 20)) == 0;
         public bool WriteBack => (Opcode & (1 << 21)) != 0;
-        public bool UseCurrentLevelBank => (Opcode & (1 << 22)) != 0;
+        public bool UseUserLevelBank => (Opcode & (1 << 22)) != 0;
         public bool IsUp => (Opcode & (1 << 23)) != 0;
         public bool IsPreIndexing => (Opcode & (1 << 24)) != 0;
+
+        public bool IsRegisterListEmpty => (Opcode & 0xFFFF) == 0;
 
         public bool HasCpuRegisterInRegisterList(CpuRegister register)
         {
